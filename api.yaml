@@ -1,0 +1,191 @@
+openapi: 3.0.3
+info:
+  title: Rig and Rack API
+  version: 1.0.0
+paths:
+  /racks:
+    get:
+      summary: Retrieve a list of racks
+      operationId: getRacks
+      responses:
+        '200':
+          description: A list of racks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Rack'
+    post:
+      summary: Create a new rack
+      operationId: createRack
+      requestBody:
+        description: The rack to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rack'
+      responses:
+        '201':
+          description: Rack created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rack'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /racks/{rackId}:
+    get:
+      summary: Retrieve a specific rack
+      operationId: getRackById
+      parameters:
+        - name: rackId
+          in: path
+          description: The ID of the rack to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A single rack
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rack'
+        '404':
+          description: Rack not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update a specific rack
+      operationId: updateRackById
+      parameters:
+        - name: rackId
+          in: path
+          description: The ID of the rack to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The updated rack data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rack'
+      responses:
+        '200':
+          description: Rack updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rack'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Rack not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete a specific rack
+      operationId: deleteRackById
+      parameters:
+        - name: rackId
+          in: path
+          description: The ID of the rack to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Rack deleted successfully
+        '404':
+          description: Rack not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /rig:
+    get:
+      summary: Retrieve the rig
+      operationId: getRig
+      responses:
+        '200':
+          description: The rig object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rig'
+
+components:
+  schemas:
+    Component:
+      type: object
+      properties:
+        id:
+          type: string
+        input:
+          type: object
+        output:
+          type: object
+        config:
+          type: object
+          nullable: true
+        ui:
+          type: object
+
+    Rack:
+      type: object
+      properties:
+        id:
+          type: string
+        components:
+          type: array
+          items:
+            $ref: '#/components/schemas/Component'
+        config:
+          type: object
+
+    ComponentConfig:
+      type: object
+      properties:
+        component:
+          $ref: '#/components/schemas/Component'
+        definition:
+          type: object
+
+    Rig:
+      type: object
+      properties:
+        componentConfigs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComponentConfig'
+        racks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rack'
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+
+

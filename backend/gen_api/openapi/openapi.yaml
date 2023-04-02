@@ -1,0 +1,286 @@
+openapi: 3.0.3
+info:
+  title: Rig and Rack API
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /racks:
+    get:
+      operationId: get_racks
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Rack'
+                type: array
+          description: A list of racks
+      summary: Retrieve a list of racks
+      x-openapi-router-controller: gen_api.controllers.default_controller
+    post:
+      operationId: create_rack
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rack'
+        description: The rack to create
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rack'
+          description: Rack created successfully
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+      summary: Create a new rack
+      x-openapi-router-controller: gen_api.controllers.default_controller
+  /racks/{rackId}:
+    delete:
+      operationId: delete_rack_by_id
+      parameters:
+      - description: The ID of the rack to delete
+        explode: false
+        in: path
+        name: rackId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Rack deleted successfully
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Rack not found
+      summary: Delete a specific rack
+      x-openapi-router-controller: gen_api.controllers.default_controller
+    get:
+      operationId: get_rack_by_id
+      parameters:
+      - description: The ID of the rack to retrieve
+        explode: false
+        in: path
+        name: rackId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rack'
+          description: A single rack
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Rack not found
+      summary: Retrieve a specific rack
+      x-openapi-router-controller: gen_api.controllers.default_controller
+    put:
+      operationId: update_rack_by_id
+      parameters:
+      - description: The ID of the rack to update
+        explode: false
+        in: path
+        name: rackId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rack'
+        description: The updated rack data
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rack'
+          description: Rack updated successfully
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Rack not found
+      summary: Update a specific rack
+      x-openapi-router-controller: gen_api.controllers.default_controller
+  /rig:
+    get:
+      operationId: get_rig
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rig'
+          description: The rig object
+      summary: Retrieve the rig
+      x-openapi-router-controller: gen_api.controllers.default_controller
+components:
+  schemas:
+    Component:
+      example:
+        output: "{}"
+        input: "{}"
+        ui: "{}"
+        id: id
+        config: "{}"
+      properties:
+        id:
+          title: id
+          type: string
+        input:
+          title: input
+          type: object
+        output:
+          title: output
+          type: object
+        config:
+          nullable: true
+          title: config
+          type: object
+        ui:
+          title: ui
+          type: object
+      title: Component
+      type: object
+    Rack:
+      example:
+        components:
+        - output: "{}"
+          input: "{}"
+          ui: "{}"
+          id: id
+          config: "{}"
+        - output: "{}"
+          input: "{}"
+          ui: "{}"
+          id: id
+          config: "{}"
+        id: id
+        config: "{}"
+      properties:
+        id:
+          title: id
+          type: string
+        components:
+          items:
+            $ref: '#/components/schemas/Component'
+          title: components
+          type: array
+        config:
+          title: config
+          type: object
+      title: Rack
+      type: object
+    ComponentConfig:
+      example:
+        component:
+          output: "{}"
+          input: "{}"
+          ui: "{}"
+          id: id
+          config: "{}"
+        definition: "{}"
+      properties:
+        component:
+          $ref: '#/components/schemas/Component'
+        definition:
+          title: definition
+          type: object
+      title: ComponentConfig
+      type: object
+    Rig:
+      example:
+        componentConfigs:
+        - component:
+            output: "{}"
+            input: "{}"
+            ui: "{}"
+            id: id
+            config: "{}"
+          definition: "{}"
+        - component:
+            output: "{}"
+            input: "{}"
+            ui: "{}"
+            id: id
+            config: "{}"
+          definition: "{}"
+        racks:
+        - components:
+          - output: "{}"
+            input: "{}"
+            ui: "{}"
+            id: id
+            config: "{}"
+          - output: "{}"
+            input: "{}"
+            ui: "{}"
+            id: id
+            config: "{}"
+          id: id
+          config: "{}"
+        - components:
+          - output: "{}"
+            input: "{}"
+            ui: "{}"
+            id: id
+            config: "{}"
+          - output: "{}"
+            input: "{}"
+            ui: "{}"
+            id: id
+            config: "{}"
+          id: id
+          config: "{}"
+      properties:
+        componentConfigs:
+          items:
+            $ref: '#/components/schemas/ComponentConfig'
+          title: componentConfigs
+          type: array
+        racks:
+          items:
+            $ref: '#/components/schemas/Rack'
+          title: racks
+          type: array
+      title: Rig
+      type: object
+    Error:
+      properties:
+        message:
+          title: message
+          type: string
+        code:
+          title: code
+          type: integer
+      title: Error
+      type: object

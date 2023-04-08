@@ -1,20 +1,21 @@
 import React from 'react';
+import { Stack, ListItem } from '@mui/material';
 import { Rack, Component } from '../api';
 import ComponentHolder from './CompHolder';
 class RackComponent extends React.Component<Rack> {
     promptComponent: Component = {
-        id: 'basicPrompt',
+        id: 'BasicPrompt',
         input: [],
-        output: [],
+        output: [{type: 'text'}],
         config: {},
         ui: {}
     };
 
     sdModel: Component = {
-        id: 'sdModel',
-        input: [],
-        output: [],
-        config: {},
+        id: 'SdModel',
+        input: [{type: 'text'}],
+        output: [{type: 'image'}],
+        config: {width: 512, height: 512},
         ui: {}
     };
     
@@ -25,17 +26,20 @@ class RackComponent extends React.Component<Rack> {
   };
     render() {
         return (
-
-            <div className="Rack">
-                <h1>Rack</h1>
+            <div>
+                 <h1>Rack</h1>
+            
+            <Stack className="Rack" spacing={4}>
+               
                 {this.state.components !== undefined ? this.state.components.map((component: Component) => {
                     return (
-                        <div className="Component" key={component.id}>
+                        <ListItem className="Component" key={component.id}>
                             <ComponentHolder data={component} uiConfig={{}}/>
-                        </div>
+                        </ListItem>
                     );
                 })
                :<></> }  
+            </Stack>
             </div>  
         ); 
     }

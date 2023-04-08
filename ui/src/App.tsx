@@ -1,12 +1,15 @@
+import  Grid from '@mui/material/Grid';
 import './App.css';
 import RackComponent from './components/Rack';
 
 
 function App() {
   return (
-    <div className="App">
-      <RackComponent/>
-    </div>
+    <Grid container spacing={5} padding={2}>
+      <Grid item xs={6}>
+        <RackComponent/>
+      </Grid> 
+    </Grid>
   );
 }
 

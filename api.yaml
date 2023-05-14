@@ -1,6 +1,82 @@
 openapi: 3.0.3
 info:
-  title: Rig and Rack API
+  title: aifi - OpenAPI 3.0
+  description: |-
+    This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about
+    ```mermaid
+    classDiagram
+    class Component {
+        string id
+    }
+    class ComponentTemplate {
+        string id
+        string label
+    }
+    class Rack {
+        string id
+        %% the below property is an array with cardinality [0..*]
+        string hiddenComponents
+    }
+    class UiSetting {
+        string id
+        string label
+        boolean hidden
+        string dataType
+        string uiType
+        object defaultValue
+        object initialValue
+    }
+    class ComponentDefinition {
+        string id
+        string label
+        object apiConfiguration
+        string version
+    }
+
+    class Asset {
+        string id
+        string type
+        string label
+        string description
+        string storageLocation
+        %% the below property is an array with cardinality [0..*]
+        string previewLocations
+    }
+    
+    class Rig { 
+    }
+    class Connection {
+        string id
+        string label
+        string description
+        string type
+        boolean required
+        boolean allowMultiple
+    }
+    class KeyValue {
+        string key
+        string value
+    }
+    class Error {
+        string message
+        integer code
+    }
+
+    Rack "1" --> "0..*" Component : components
+    Rig "1" --> "0..*" ComponentDefinition : componentDefinitions
+    Rig  "1" --> "0..*" KeyValue : config
+    Rig  "1" --> "0..*" KeyValue : secrets
+    Rack "1" --> "0..1"  Component: rackAsComponent
+    Rack "1" --> "0..*"  Connection: output
+    Rig "1" --> "0..*" Rack : racks
+    ComponentDefinition "1" --> "1..*" ComponentTemplate : componentTemplates
+    ComponentDefinition "1" --> "0..*" Asset : assets
+    ComponentTemplate "1" --> "1" Component: component
+    Component "1" --> "0..1"  ComponentDefinition: componentDefinition
+    Component "1" --> "0..*"  UiSetting: uiSettings
+    Component "1" --> "0..*"  Connection: input
+    Component "1" --> "0..*"  Connection: output
+    ```
   version: 1.0.0
 paths:
   /racks:
@@ -139,47 +215,163 @@ components:
       properties:
         id:
           type: string
+        componentDefinition:
+          $ref: '#/components/schemas/ComponentDefinition'
+        uiSettings:
+          type: array
+          items:
+            $ref: '#/components/schemas/UiSetting'
+          minItems: 0
         input:
-          type: object
+          type: array
+          items:
+            $ref: '#/components/schemas/Connection'
+          minItems: 0
         output:
-          type: object
-        config:
-          type: object
-          nullable: true
-        ui:
-          type: object
+          type: array
+          items:
+            $ref: '#/components/schemas/Connection'
+          minItems: 0
+
+    ComponentTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        component:
+          $ref: '#/components/schemas/Component'
 
     Rack:
       type: object
       properties:
         id:
           type: string
+        hiddenComponents:
+          type: array
+          items:
+            type: string
+          minItems: 0
         components:
           type: array
           items:
             $ref: '#/components/schemas/Component'
-        config:
-          type: object
+          minItems: 0
+        rackAsComponent:
+          $ref: '#/components/schemas/Component'
+        output:
+          type: array
+          items:
+            $ref: '#/components/schemas/Connection'
+          minItems: 0
 
-    ComponentConfig:
+    UiSetting:
       type: object
       properties:
-        component:
-          $ref: '#/components/schemas/Component'
-        definition:
+        id:
+          type: string
+        label:
+          type: string
+        hidden:
+          type: boolean
+        dataType:
+          type: string
+        uiType:
+          type: string
+        defaultValue:
           type: object
+        initialValue:
+          type: object
+
+    ComponentDefinition:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        apiConfiguration:
+          type: object
+        version:
+          type: string
+        componentTemplates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComponentTemplate'
+          minItems: 1
+        assets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Asset'
+          minItems: 0
 
     Rig:
       type: object
       properties:
-        componentConfigs:
+        componentDefinitions:
           type: array
           items:
-            $ref: '#/components/schemas/ComponentConfig'
+            $ref: '#/components/schemas/ComponentDefinition'
+          minItems: 0
+        config:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyValue'
+          minItems: 0
+        secrets:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyValue'
+          minItems: 0
         racks:
           type: array
           items:
             $ref: '#/components/schemas/Rack'
+          minItems: 0
+
+    Connection:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+        required:
+          type: boolean
+        allowMultiple:
+          type: boolean
+    Asset:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        label:
+          type: string
+        description:
+          type: string
+        storageLocation:
+          type: string
+        previewLocations:
+          type: array
+          items:
+            type: string
+          minItems: 0
+
+    KeyValue:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+
     Error:
       type: object
       properties:
@@ -187,5 +379,4 @@ components:
           type: string
         code:
           type: integer
-
 

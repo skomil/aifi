@@ -13,4 +13,4 @@ EXPOSE 8080
 
 ENTRYPOINT ["python3"]
 
-CMD ["-m", "backend/app.py"]
+CMD ["-m", "openapi_server"]

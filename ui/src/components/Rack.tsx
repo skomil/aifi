@@ -7,22 +7,17 @@ class RackComponent extends React.Component<Rack> {
         id: 'BasicPrompt',
         input: [],
         output: [{type: 'text'}],
-        config: {},
-        ui: {}
     };
 
     sdModel: Component = {
         id: 'SdModel',
         input: [{type: 'text'}],
-        output: [{type: 'image'}],
-        config: {width: 512, height: 512},
-        ui: {}
+        output: [{type: 'image'}]
     };
     
 
     state: Rack = {
     components: [this.promptComponent, this.sdModel],
-    config: {},
   };
     render() {
         return (

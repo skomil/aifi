@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * aifi - OpenAPI 3.0
- * This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about ```mermaid classDiagram class Component {     string id } class ComponentTemplate {     string id     string label } class Rack {     string id     %% the below property is an array with cardinality [0..*]     string hiddenComponents } class UiSetting {     string id     string label     boolean hidden     string dataType     string uiType     object defaultValue     object initialValue } class ComponentDefinition {     string id     string label     object apiConfiguration     string version }  class Asset {     string id     string type     string label     string description     string storageLocation     %% the below property is an array with cardinality [0..*]     string previewLocations }  class Rig {  } class Connection {     string id     string label     string description     string type     boolean required     boolean allowMultiple } class KeyValue {     string key     string value } class Error {     string message     integer code }  Rack \"1\" --> \"0..*\" Component : components Rig \"1\" --> \"0..*\" ComponentDefinition : componentDefinitions Rig  \"1\" --> \"0..*\" KeyValue : config Rig  \"1\" --> \"0..*\" KeyValue : secrets Rack \"1\" --> \"0..1\"  Component: rackAsComponent Rack \"1\" --> \"0..*\"  Connection: output Rig \"1\" --> \"0..*\" Rack : racks ComponentDefinition \"1\" --> \"1..*\" ComponentTemplate : componentTemplates ComponentDefinition \"1\" --> \"0..*\" Asset : assets ComponentTemplate \"1\" --> \"1\" Component: component Component \"1\" --> \"0..1\"  ComponentDefinition: componentDefinition Component \"1\" --> \"0..*\"  UiSetting: uiSettings Component \"1\" --> \"0..*\"  Connection: input Component \"1\" --> \"0..*\"  Connection: output ```
+ * This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about ```mermaid classDiagram class Component {     string id } class ComponentTemplate {     string id     string label } class Rack {     string id     string label     string description     %% the below property is an array with cardinality [0..*]     string hiddenComponents } class UiSetting {     string id     string label     boolean hidden     string dataType     string uiType     object defaultValue     object initialValue } class ComponentDefinition {     string id     string label     object apiConfiguration     string version }  class Asset {     string id     string type     string label     string description     string storageLocation     %% the below property is an array with cardinality [0..*]     string previewLocations }  class Rig {  } class Connection {     string id     string label     string description     string type     boolean required     boolean allowMultiple } class KeyValue {     string key     string value } class Error {     string message     integer code }  Rack \"1\" --> \"0..*\" Component : components Rig \"1\" --> \"0..*\" ComponentDefinition : componentDefinitions Rig  \"1\" --> \"0..*\" KeyValue : config Rig  \"1\" --> \"0..*\" KeyValue : secrets Rack \"1\" --> \"0..1\"  Component: rackAsComponent Rack \"1\" --> \"0..*\"  Connection: output Rig \"1\" --> \"0..*\" Rack : racks ComponentDefinition \"1\" --> \"1..*\" ComponentTemplate : componentTemplates ComponentDefinition \"1\" --> \"0..*\" Asset : assets Component \"1\" --> \"0..1\"  ComponentDefinition: componentDefinition Component \"1\" --> \"0..*\"  UiSetting: uiSettings Component \"1\" --> \"0..*\"  Connection: input Component \"1\" --> \"0..*\"  Connection: output ComponentTemplate \"1\" --> \"0..*\"  UiSetting: uiSettings ComponentTemplate \"1\" --> \"0..*\"  Connection: input ComponentTemplate \"1\" --> \"0..*\"  Connection: output ```
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -80,12 +80,6 @@ export interface Component {
     'id'?: string;
     /**
      * 
-     * @type {ComponentDefinition}
-     * @memberof Component
-     */
-    'componentDefinition'?: ComponentDefinition;
-    /**
-     * 
      * @type {Array<UiSetting>}
      * @memberof Component
      */
@@ -102,6 +96,12 @@ export interface Component {
      * @memberof Component
      */
     'output'?: Array<Connection>;
+    /**
+     * 
+     * @type {ComponentDefinition}
+     * @memberof Component
+     */
+    'componentDefinition'?: ComponentDefinition;
 }
 /**
  * 
@@ -153,23 +153,35 @@ export interface ComponentDefinition {
  */
 export interface ComponentTemplate {
     /**
-     * 
+     * The unique identifier for the component template.
      * @type {string}
      * @memberof ComponentTemplate
      */
-    'id'?: string;
+    'id': string;
     /**
-     * 
+     * The label for the component template.
      * @type {string}
      * @memberof ComponentTemplate
      */
-    'label'?: string;
+    'label': string;
     /**
-     * 
-     * @type {Component}
+     * The user interface settings for the component.
+     * @type {Array<UiSetting>}
      * @memberof ComponentTemplate
      */
-    'component'?: Component;
+    'uiSettings'?: Array<UiSetting>;
+    /**
+     * The input connections for the component.
+     * @type {Array<Connection>}
+     * @memberof ComponentTemplate
+     */
+    'input'?: Array<Connection>;
+    /**
+     * The output connections for the component.
+     * @type {Array<Connection>}
+     * @memberof ComponentTemplate
+     */
+    'output'?: Array<Connection>;
 }
 /**
  * 
@@ -266,10 +278,16 @@ export interface Rack {
     'id'?: string;
     /**
      * 
-     * @type {Array<string>}
+     * @type {string}
      * @memberof Rack
      */
-    'hiddenComponents'?: Array<string>;
+    'label'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Rack
+     */
+    'description'?: string;
     /**
      * 
      * @type {Array<Component>}
@@ -288,6 +306,12 @@ export interface Rack {
      * @memberof Rack
      */
     'output'?: Array<Connection>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof Rack
+     */
+    'hiddenComponents'?: Array<string>;
 }
 /**
  * 
@@ -295,12 +319,6 @@ export interface Rack {
  * @interface Rig
  */
 export interface Rig {
-    /**
-     * 
-     * @type {Array<ComponentDefinition>}
-     * @memberof Rig
-     */
-    'componentDefinitions'?: Array<ComponentDefinition>;
     /**
      * 
      * @type {Array<KeyValue>}
@@ -313,6 +331,12 @@ export interface Rig {
      * @memberof Rig
      */
     'secrets'?: Array<KeyValue>;
+    /**
+     * 
+     * @type {Array<ComponentDefinition>}
+     * @memberof Rig
+     */
+    'componentDefinitions'?: Array<ComponentDefinition>;
     /**
      * 
      * @type {Array<Rack>}

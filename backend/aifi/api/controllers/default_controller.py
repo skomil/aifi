@@ -4,10 +4,10 @@ from typing import Dict
 from typing import Tuple
 from typing import Union
 
-from openapi_server.models.error import Error  # noqa: E501
-from openapi_server.models.rack import Rack  # noqa: E501
-from openapi_server.models.rig import Rig  # noqa: E501
-from openapi_server import util
+from aifi.api.models.error import Error  # noqa: E501
+from aifi.api.models.rack import Rack  # noqa: E501
+from aifi.api.models.rig import Rig  # noqa: E501
+from aifi.api import util
 
 
 def create_rack(rack):  # noqa: E501

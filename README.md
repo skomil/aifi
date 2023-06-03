@@ -51,7 +51,7 @@ npm install
 
 ```bash
 cd backend
-python app.py
+python -m aifi.server
 ```
 
 2. Start the UI development server:
@@ -78,10 +78,14 @@ openapi-generator-cli generate -i api.yaml -g typescript-axios -o ui/src/api
 4. Regenerate the Python API interface:
 
 ```bash
-openapi-generator-cli generate -i api.yaml -g python-flask -o backend
+openapi-generator-cli generate -i api.yaml -g python-flask -o backend --package-name aifi.api
 ```
 
-5. Update your backend implementation and UI components to reflect the changes in the API schema.
+Please note the paths /ui/src/api and backend/aifi/api are generated code and should not be edited
+
+5. in the backend generated openapi.yaml, replace all instances of `aifi.api.controllers.default_controller` with the actual implementation, `aifi.server.controller` and modify the method signatures in that module if needed. 
+
+6. Update your backend implementation and UI components to reflect the changes in the API schema.
 
 ###
 

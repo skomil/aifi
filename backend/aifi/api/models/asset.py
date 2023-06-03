@@ -5,8 +5,8 @@ from datetime import date, datetime  # noqa: F401
 
 from typing import List, Dict  # noqa: F401
 
-from openapi_server.models.base_model_ import Model
-from openapi_server import util
+from aifi.api.models.base_model_ import Model
+from aifi.api import util
 
 
 class Asset(Model):
@@ -190,7 +190,5 @@ class Asset(Model):
         :param preview_locations: The preview_locations of this Asset.
         :type preview_locations: List[str]
         """
-        if preview_locations is not None and len(preview_locations) < 0:
-            raise ValueError("Invalid value for `preview_locations`, number of items must be greater than or equal to `0`")  # noqa: E501
 
         self._preview_locations = preview_locations

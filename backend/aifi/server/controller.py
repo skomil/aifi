@@ -8,6 +8,7 @@ from aifi.api.models.error import Error  # noqa: E501
 from aifi.api.models.rack import Rack  # noqa: E501
 from aifi.api.models.rig import Rig  # noqa: E501
 from aifi.api import util
+from aifi.sample.rig import Rig as RigSample
 
 
 def create_rack(rack):  # noqa: E501
@@ -72,7 +73,8 @@ def get_rig():  # noqa: E501
 
     :rtype: Union[Rig, Tuple[Rig, int], Tuple[Rig, int, Dict[str, str]]
     """
-    return 'do some magic!'
+    rig = RigSample().get_instance()
+    return rig
 
 
 def update_rack_by_id(rack_id, rack):  # noqa: E501

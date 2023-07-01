@@ -35,6 +35,7 @@ cd aifi
 ```bash
 python3 -m venv venv
 source venv/bin/activate
+pip install torch==2.0.0+cu118 torchvision==0.15.1+cu118 torchaudio==2.0.1 --index-url https://download.pytorch.org/whl/cu118
 pip install -r backend/requirements.txt
 ```
 

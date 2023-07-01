@@ -4,8 +4,10 @@ from aifi.api.models.connection import Connection
 from aifi.api.models.ui_setting import UiSetting
 
 class Prompt():
-    
+    active = True
     definition = None
+    output = {'output': ''}
+
     def __init__(self) -> None:
         self.__setup()
     
@@ -15,9 +17,9 @@ class Prompt():
                                          version="0.0.1"
                                         )
         basetemplate = ComponentTemplate(id="default", label="Default")
-        basetemplate.inputs = []
-        basetemplate.outputs = []
-        basetemplate.outputs.append(Connection(id="output", label="Output", type="STRING"))
+        basetemplate.input = []
+        basetemplate.output = []
+        basetemplate.output.append(Connection(id="output", label="Output", type="STRING"))
         basetemplate._ui_settings = []
         basetemplate._ui_settings.append(UiSetting(id="prompt", label="Prompt", data_type="STRING", ui_type="TEXT_AREA"))
         self.definition.component_templates = []
@@ -26,3 +28,9 @@ class Prompt():
 
     def get_definition(self) -> ComponentDefinition:
         return self.definition
+    
+    def ui_update(self, input):
+        self.output['output'] = input['prompt']
+
+    def run(self):
+        return self.output

@@ -1,0 +1,8 @@
+{
+    "label": "Rack1",
+    "devices": [{
+        "label": "Device",
+        "factory": "PromptFactory"
+    }]
+    
+}

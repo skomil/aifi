@@ -2,13 +2,10 @@ openapi: 3.0.3
 info:
   title: aifi - OpenAPI 3.0
   description: |-
-    This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about
+    ## Model Diagram
     ```mermaid
     classDiagram
-    class Component {
-        string id
-    }
-    class ComponentTemplate {
+    class Device {
         string id
         string label
     }
@@ -28,7 +25,7 @@ info:
         object defaultValue
         object initialValue
     }
-    class ComponentDefinition {
+    class DeviceFactory {
         string id
         string label
         object apiConfiguration
@@ -64,22 +61,19 @@ info:
         integer code
     }
 
-    Rack "1" --> "0..*" Component : components
-    Rig "1" --> "0..*" ComponentDefinition : componentDefinitions
+    Rack "1" --> "0..*" Device : devices
+    Rig "1" --> "0..*" DeviceFactory : factories
     Rig  "1" --> "0..*" KeyValue : config
     Rig  "1" --> "0..*" KeyValue : secrets
-    Rack "1" --> "0..1"  Component: rackAsComponent
+    DeviceFactory "1" --> "0..1"  Rack: rackAsDevice
     Rack "1" --> "0..*"  Connection: output
     Rig "1" --> "0..*" Rack : racks
-    ComponentDefinition "1" --> "1..*" ComponentTemplate : componentTemplates
-    ComponentDefinition "1" --> "0..*" Asset : assets
-    Component "1" --> "0..1"  ComponentDefinition: componentDefinition
-    Component "1" --> "0..*"  UiSetting: uiSettings
-    Component "1" --> "0..*"  Connection: input
-    Component "1" --> "0..*"  Connection: output
-    ComponentTemplate "1" --> "0..*"  UiSetting: uiSettings
-    ComponentTemplate "1" --> "0..*"  Connection: input
-    ComponentTemplate "1" --> "0..*"  Connection: output
+    DeviceFactory "1" --> "0..*" Asset : assets
+    Device "1" --> "1"  DeviceFactory: definition
+    Device "1" --> "0..*"  UiSetting: uiSettingOverrides
+    DeviceFactory "1" --> "0..*"  UiSetting: uiSettings
+    DeviceFactory "1" --> "0..*"  Connection: input
+    DeviceFactory "1" --> "0..*"  Connection: output
     ```
   version: 1.0.0
 paths:
@@ -214,29 +208,34 @@ paths:
 
 components:
   schemas:
-    Asset:
+    Device:
       type: object
       properties:
         id:
-          type: string
-        type:
           type: string
         label:
           type: string
-        description:
-          type: string
-        storageLocation:
-          type: string
-        previewLocations:
+        definition:
+          $ref: '#/components/schemas/DeviceFactory'
+        uiSettingOverrides:
           type: array
           items:
-            type: string
-
-    Component:
+            $ref: '#/components/schemas/UiSetting'
+    DeviceFactory:
       type: object
       properties:
         id:
           type: string
+        label:
+          type: string
+        apiConfiguration:
+          type: object
+        version:
+          type: string
+        assets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Asset'
         uiSettings:
           type: array
           items:
@@ -249,80 +248,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Connection'
-        componentDefinition:
-          $ref: '#/components/schemas/ComponentDefinition'
-
-    ComponentDefinition:
-      type: object
-      properties:
-        id:
-          type: string
-        label:
-          type: string
-        apiConfiguration:
-          type: object
-        version:
-          type: string
-        componentTemplates:
-          type: array
-          items:
-            $ref: '#/components/schemas/ComponentTemplate'
-        assets:
-          type: array
-          items:
-            $ref: '#/components/schemas/Asset'
-
-    ComponentTemplate:
-      type: object
-      properties:
-          id:
-              type: string
-              description: The unique identifier for the component template.
-          label:
-              type: string
-              description: The label for the component template.
-          uiSettings:
-              type: array
-              items:
-                  $ref: '#/components/schemas/UiSetting'
-              description: The user interface settings for the component.
-          input:
-              type: array
-              items:
-                  $ref: '#/components/schemas/Connection'
-              description: The input connections for the component.
-          output:
-              type: array
-              items:
-                  $ref: '#/components/schemas/Connection'
-              description: The output connections for the component.
-      required:
-          - id
-          - label
-
-    Connection:
-      type: object
-      properties:
-        id:
-          type: string
-        label:
-          type: string
-        description:
-          type: string
-        type:
-          type: string
-        required:
-          type: boolean
-        allowMultiple:
-          type: boolean
-
-    KeyValue:
-      type: object
-      properties:
-        key:
-          type: string
-        value:
-          type: string
     Rack:
       type: object
       properties:
@@ -332,41 +257,18 @@ components:
           type: string
         description:
           type: string
-        components:
-          type: array
-          items:
-            $ref: '#/components/schemas/Component'
-        rackAsComponent:
-          $ref: '#/components/schemas/Component'
-        output:
-          type: array
-          items:
-            $ref: '#/components/schemas/Connection'
         hiddenComponents:
           type: array
           items:
             type: string
-
-    Rig:
-      type: object
-      properties:
-        config:
+        devices:
           type: array
           items:
-            $ref: '#/components/schemas/KeyValue'
-        secrets:
+            $ref: '#/components/schemas/Device'
+        output:
           type: array
           items:
-            $ref: '#/components/schemas/KeyValue'
-        componentDefinitions:
-          type: array
-          items:
-            $ref: '#/components/schemas/ComponentDefinition'
-        racks:
-          type: array
-          items:
-            $ref: '#/components/schemas/Rack'
-
+            $ref: '#/components/schemas/Connection'
     UiSetting:
       type: object
       properties:
@@ -384,7 +286,45 @@ components:
           type: object
         initialValue:
           type: object
-
+    Asset:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        label:
+          type: string
+        description:
+          type: string
+        storageLocation:
+          type: string
+        previewLocations:
+          type: array
+          items:
+            type: string
+    Connection:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+        required:
+          type: boolean
+        allowMultiple:
+          type: boolean
+    KeyValue:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
     Error:
       type: object
       properties:
@@ -392,5 +332,24 @@ components:
           type: string
         code:
           type: integer
+    Rig:
+      type: object
+      properties:
+        factories:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeviceFactory'
+        config:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyValue'
+        secrets:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyValue'
+        racks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rack'
 
 

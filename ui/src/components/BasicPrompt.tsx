@@ -1,10 +1,10 @@
 import * as React from "react";
 import {TextField} from '@mui/material';
-import { Component } from "../api";
+import { Device } from "../api";
 import { ComponentHolderProps } from "./CompHolder";
 
 class BasicPrompt extends React.Component<ComponentHolderProps> {
-  data: Component = this.props.data;
+  data: Device = this.props.data;
 
   render() {
     return (

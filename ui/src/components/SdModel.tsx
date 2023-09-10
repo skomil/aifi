@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Component } from '../api';
+import { Device } from '../api';
 import { ComponentHolderProps } from './CompHolder';
 
 class SdModel extends React.Component<ComponentHolderProps> {
-    data: Component = this.props.data;
+    data: Device = this.props.data;
     
     render() {
         return (<div>

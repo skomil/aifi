@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * aifi - OpenAPI 3.0
- * This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about ```mermaid classDiagram class Component {     string id } class ComponentTemplate {     string id     string label } class Rack {     string id     string label     string description     %% the below property is an array with cardinality [0..*]     string hiddenComponents } class UiSetting {     string id     string label     boolean hidden     string dataType     string uiType     object defaultValue     object initialValue } class ComponentDefinition {     string id     string label     object apiConfiguration     string version }  class Asset {     string id     string type     string label     string description     string storageLocation     %% the below property is an array with cardinality [0..*]     string previewLocations }  class Rig {  } class Connection {     string id     string label     string description     string type     boolean required     boolean allowMultiple } class KeyValue {     string key     string value } class Error {     string message     integer code }  Rack \"1\" --> \"0..*\" Component : components Rig \"1\" --> \"0..*\" ComponentDefinition : componentDefinitions Rig  \"1\" --> \"0..*\" KeyValue : config Rig  \"1\" --> \"0..*\" KeyValue : secrets Rack \"1\" --> \"0..1\"  Component: rackAsComponent Rack \"1\" --> \"0..*\"  Connection: output Rig \"1\" --> \"0..*\" Rack : racks ComponentDefinition \"1\" --> \"1..*\" ComponentTemplate : componentTemplates ComponentDefinition \"1\" --> \"0..*\" Asset : assets Component \"1\" --> \"0..1\"  ComponentDefinition: componentDefinition Component \"1\" --> \"0..*\"  UiSetting: uiSettings Component \"1\" --> \"0..*\"  Connection: input Component \"1\" --> \"0..*\"  Connection: output ComponentTemplate \"1\" --> \"0..*\"  UiSetting: uiSettings ComponentTemplate \"1\" --> \"0..*\"  Connection: input ComponentTemplate \"1\" --> \"0..*\"  Connection: output ```
+ * ## Model Diagram ```mermaid classDiagram class Device {     string id     string label } class Rack {     string id     string label     string description     %% the below property is an array with cardinality [0..*]     string hiddenComponents } class UiSetting {     string id     string label     boolean hidden     string dataType     string uiType     object defaultValue     object initialValue } class DeviceFactory {     string id     string label     object apiConfiguration     string version }  class Asset {     string id     string type     string label     string description     string storageLocation     %% the below property is an array with cardinality [0..*]     string previewLocations }  class Rig {  } class Connection {     string id     string label     string description     string type     boolean required     boolean allowMultiple } class KeyValue {     string key     string value } class Error {     string message     integer code }  Rack \"1\" --> \"0..*\" Device : devices Rig \"1\" --> \"0..*\" DeviceFactory : factories Rig  \"1\" --> \"0..*\" KeyValue : config Rig  \"1\" --> \"0..*\" KeyValue : secrets DeviceFactory \"1\" --> \"0..1\"  Rack: rackAsDevice Rack \"1\" --> \"0..*\"  Connection: output Rig \"1\" --> \"0..*\" Rack : racks DeviceFactory \"1\" --> \"0..*\" Asset : assets Device \"1\" --> \"1\"  DeviceFactory: definition Device \"1\" --> \"0..*\"  UiSetting: uiSettingOverrides DeviceFactory \"1\" --> \"0..*\"  UiSetting: uiSettings DeviceFactory \"1\" --> \"0..*\"  Connection: input DeviceFactory \"1\" --> \"0..*\"  Connection: output ```
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -69,123 +69,6 @@ export interface Asset {
 /**
  * 
  * @export
- * @interface Component
- */
-export interface Component {
-    /**
-     * 
-     * @type {string}
-     * @memberof Component
-     */
-    'id'?: string;
-    /**
-     * 
-     * @type {Array<UiSetting>}
-     * @memberof Component
-     */
-    'uiSettings'?: Array<UiSetting>;
-    /**
-     * 
-     * @type {Array<Connection>}
-     * @memberof Component
-     */
-    'input'?: Array<Connection>;
-    /**
-     * 
-     * @type {Array<Connection>}
-     * @memberof Component
-     */
-    'output'?: Array<Connection>;
-    /**
-     * 
-     * @type {ComponentDefinition}
-     * @memberof Component
-     */
-    'componentDefinition'?: ComponentDefinition;
-}
-/**
- * 
- * @export
- * @interface ComponentDefinition
- */
-export interface ComponentDefinition {
-    /**
-     * 
-     * @type {string}
-     * @memberof ComponentDefinition
-     */
-    'id'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ComponentDefinition
-     */
-    'label'?: string;
-    /**
-     * 
-     * @type {object}
-     * @memberof ComponentDefinition
-     */
-    'apiConfiguration'?: object;
-    /**
-     * 
-     * @type {string}
-     * @memberof ComponentDefinition
-     */
-    'version'?: string;
-    /**
-     * 
-     * @type {Array<ComponentTemplate>}
-     * @memberof ComponentDefinition
-     */
-    'componentTemplates'?: Array<ComponentTemplate>;
-    /**
-     * 
-     * @type {Array<Asset>}
-     * @memberof ComponentDefinition
-     */
-    'assets'?: Array<Asset>;
-}
-/**
- * 
- * @export
- * @interface ComponentTemplate
- */
-export interface ComponentTemplate {
-    /**
-     * The unique identifier for the component template.
-     * @type {string}
-     * @memberof ComponentTemplate
-     */
-    'id': string;
-    /**
-     * The label for the component template.
-     * @type {string}
-     * @memberof ComponentTemplate
-     */
-    'label': string;
-    /**
-     * The user interface settings for the component.
-     * @type {Array<UiSetting>}
-     * @memberof ComponentTemplate
-     */
-    'uiSettings'?: Array<UiSetting>;
-    /**
-     * The input connections for the component.
-     * @type {Array<Connection>}
-     * @memberof ComponentTemplate
-     */
-    'input'?: Array<Connection>;
-    /**
-     * The output connections for the component.
-     * @type {Array<Connection>}
-     * @memberof ComponentTemplate
-     */
-    'output'?: Array<Connection>;
-}
-/**
- * 
- * @export
  * @interface Connection
  */
 export interface Connection {
@@ -225,6 +108,92 @@ export interface Connection {
      * @memberof Connection
      */
     'allowMultiple'?: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface Device
+ */
+export interface Device {
+    /**
+     * 
+     * @type {string}
+     * @memberof Device
+     */
+    'id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Device
+     */
+    'label'?: string;
+    /**
+     * 
+     * @type {DeviceFactory}
+     * @memberof Device
+     */
+    'definition'?: DeviceFactory;
+    /**
+     * 
+     * @type {Array<UiSetting>}
+     * @memberof Device
+     */
+    'uiSettingOverrides'?: Array<UiSetting>;
+}
+/**
+ * 
+ * @export
+ * @interface DeviceFactory
+ */
+export interface DeviceFactory {
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceFactory
+     */
+    'id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceFactory
+     */
+    'label'?: string;
+    /**
+     * 
+     * @type {object}
+     * @memberof DeviceFactory
+     */
+    'apiConfiguration'?: object;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeviceFactory
+     */
+    'version'?: string;
+    /**
+     * 
+     * @type {Array<Asset>}
+     * @memberof DeviceFactory
+     */
+    'assets'?: Array<Asset>;
+    /**
+     * 
+     * @type {Array<UiSetting>}
+     * @memberof DeviceFactory
+     */
+    'uiSettings'?: Array<UiSetting>;
+    /**
+     * 
+     * @type {Array<Connection>}
+     * @memberof DeviceFactory
+     */
+    'input'?: Array<Connection>;
+    /**
+     * 
+     * @type {Array<Connection>}
+     * @memberof DeviceFactory
+     */
+    'output'?: Array<Connection>;
 }
 /**
  * 
@@ -290,28 +259,22 @@ export interface Rack {
     'description'?: string;
     /**
      * 
-     * @type {Array<Component>}
+     * @type {Array<string>}
      * @memberof Rack
      */
-    'components'?: Array<Component>;
+    'hiddenComponents'?: Array<string>;
     /**
      * 
-     * @type {Component}
+     * @type {Array<Device>}
      * @memberof Rack
      */
-    'rackAsComponent'?: Component;
+    'devices'?: Array<Device>;
     /**
      * 
      * @type {Array<Connection>}
      * @memberof Rack
      */
     'output'?: Array<Connection>;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof Rack
-     */
-    'hiddenComponents'?: Array<string>;
 }
 /**
  * 
@@ -319,6 +282,12 @@ export interface Rack {
  * @interface Rig
  */
 export interface Rig {
+    /**
+     * 
+     * @type {Array<DeviceFactory>}
+     * @memberof Rig
+     */
+    'factories'?: Array<DeviceFactory>;
     /**
      * 
      * @type {Array<KeyValue>}
@@ -331,12 +300,6 @@ export interface Rig {
      * @memberof Rig
      */
     'secrets'?: Array<KeyValue>;
-    /**
-     * 
-     * @type {Array<ComponentDefinition>}
-     * @memberof Rig
-     */
-    'componentDefinitions'?: Array<ComponentDefinition>;
     /**
      * 
      * @type {Array<Rack>}

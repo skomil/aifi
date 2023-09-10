@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { Component } from '../api';
+import { Device } from '../api';
 import SdModel from './SdModel';
 import BasicPrompt from './BasicPrompt';
 
 export interface ComponentHolderProps {
     uiConfig: object;
-    data: Component;
+    data: Device;
 }
-const componentSwitch = (data: Component, config: Object) => {
+const componentSwitch = (data: Device, config: Object) => {
     if (data.id === 'SdModel') {
         return <SdModel data={data} uiConfig={config} />
     } else if (data.id === 'BasicPrompt') {

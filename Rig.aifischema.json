@@ -1,0 +1,250 @@
+{
+    "properties": {
+        "factories": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/DeviceFactory"
+            }
+        },
+        "config": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/KeyValue"
+            }
+        },
+        "secrets": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/KeyValue"
+            }
+        },
+        "racks": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Rack"
+            }
+        }
+    },
+    "type": "object",
+    "definitions": {
+        "Device": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "definition": {
+                    "$ref": "#/definitions/DeviceFactory"
+                },
+                "uiSettingOverrides": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/UiSetting"
+                    }
+                }
+            },
+            "type": "object"
+        },
+        "DeviceFactory": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "apiConfiguration": {
+                    "type": "object"
+                },
+                "version": {
+                    "type": "string"
+                },
+                "assets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Asset"
+                    }
+                },
+                "uiSettings": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/UiSetting"
+                    }
+                },
+                "input": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Connection"
+                    }
+                },
+                "output": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Connection"
+                    }
+                }
+            },
+            "type": "object"
+        },
+        "Rack": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "hiddenComponents": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "devices": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Device"
+                    }
+                },
+                "output": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Connection"
+                    }
+                }
+            },
+            "type": "object"
+        },
+        "UiSetting": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "hidden": {
+                    "type": "boolean"
+                },
+                "dataType": {
+                    "type": "string"
+                },
+                "uiType": {
+                    "type": "string"
+                },
+                "defaultValue": {
+                    "type": "object"
+                },
+                "initialValue": {
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "Asset": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "storageLocation": {
+                    "type": "string"
+                },
+                "previewLocations": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "type": "object"
+        },
+        "Connection": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "required": {
+                    "type": "boolean"
+                },
+                "allowMultiple": {
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
+        "KeyValue": {
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "Error": {
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "integer"
+                }
+            },
+            "type": "object"
+        },
+        "Rig": {
+            "properties": {
+                "factories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/DeviceFactory"
+                    }
+                },
+                "config": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/KeyValue"
+                    }
+                },
+                "secrets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/KeyValue"
+                    }
+                },
+                "racks": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Rack"
+                    }
+                }
+            },
+            "type": "object"
+        }
+    }
+}

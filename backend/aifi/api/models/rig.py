@@ -6,12 +6,12 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from aifi.api.models.base_model_ import Model
-from aifi.api.models.component_definition import ComponentDefinition
+from aifi.api.models.device_factory import DeviceFactory
 from aifi.api.models.key_value import KeyValue
 from aifi.api.models.rack import Rack
 from aifi.api import util
 
-from aifi.api.models.component_definition import ComponentDefinition  # noqa: E501
+from aifi.api.models.device_factory import DeviceFactory  # noqa: E501
 from aifi.api.models.key_value import KeyValue  # noqa: E501
 from aifi.api.models.rack import Rack  # noqa: E501
 
@@ -21,35 +21,35 @@ class Rig(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, config=None, secrets=None, component_definitions=None, racks=None):  # noqa: E501
+    def __init__(self, factories=None, config=None, secrets=None, racks=None):  # noqa: E501
         """Rig - a model defined in OpenAPI
 
+        :param factories: The factories of this Rig.  # noqa: E501
+        :type factories: List[DeviceFactory]
         :param config: The config of this Rig.  # noqa: E501
         :type config: List[KeyValue]
         :param secrets: The secrets of this Rig.  # noqa: E501
         :type secrets: List[KeyValue]
-        :param component_definitions: The component_definitions of this Rig.  # noqa: E501
-        :type component_definitions: List[ComponentDefinition]
         :param racks: The racks of this Rig.  # noqa: E501
         :type racks: List[Rack]
         """
         self.openapi_types = {
+            'factories': List[DeviceFactory],
             'config': List[KeyValue],
             'secrets': List[KeyValue],
-            'component_definitions': List[ComponentDefinition],
             'racks': List[Rack]
         }
 
         self.attribute_map = {
+            'factories': 'factories',
             'config': 'config',
             'secrets': 'secrets',
-            'component_definitions': 'componentDefinitions',
             'racks': 'racks'
         }
 
+        self._factories = factories
         self._config = config
         self._secrets = secrets
-        self._component_definitions = component_definitions
         self._racks = racks
 
     @classmethod
@@ -62,6 +62,27 @@ class Rig(Model):
         :rtype: Rig
         """
         return util.deserialize_model(dikt, cls)
+
+    @property
+    def factories(self):
+        """Gets the factories of this Rig.
+
+
+        :return: The factories of this Rig.
+        :rtype: List[DeviceFactory]
+        """
+        return self._factories
+
+    @factories.setter
+    def factories(self, factories):
+        """Sets the factories of this Rig.
+
+
+        :param factories: The factories of this Rig.
+        :type factories: List[DeviceFactory]
+        """
+
+        self._factories = factories
 
     @property
     def config(self):
@@ -104,27 +125,6 @@ class Rig(Model):
         """
 
         self._secrets = secrets
-
-    @property
-    def component_definitions(self):
-        """Gets the component_definitions of this Rig.
-
-
-        :return: The component_definitions of this Rig.
-        :rtype: List[ComponentDefinition]
-        """
-        return self._component_definitions
-
-    @component_definitions.setter
-    def component_definitions(self, component_definitions):
-        """Sets the component_definitions of this Rig.
-
-
-        :param component_definitions: The component_definitions of this Rig.
-        :type component_definitions: List[ComponentDefinition]
-        """
-
-        self._component_definitions = component_definitions
 
     @property
     def racks(self):

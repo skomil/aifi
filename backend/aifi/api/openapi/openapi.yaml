@@ -1,31 +1,26 @@
 openapi: 3.0.3
 info:
-  description: "This is a sample Pet Store Server based on the OpenAPI 3.0 specification.\
-    \  You can find out more about\n```mermaid\nclassDiagram\nclass Component {\n\
-    \    string id\n}\nclass ComponentTemplate {\n    string id\n    string label\n\
-    }\nclass Rack {\n    string id\n    string label\n    string description\n   \
-    \ %% the below property is an array with cardinality [0..*]\n    string hiddenComponents\n\
-    }\nclass UiSetting {\n    string id\n    string label\n    boolean hidden\n  \
-    \  string dataType\n    string uiType\n    object defaultValue\n    object initialValue\n\
-    }\nclass ComponentDefinition {\n    string id\n    string label\n    object apiConfiguration\n\
-    \    string version\n}\n\nclass Asset {\n    string id\n    string type\n    string\
-    \ label\n    string description\n    string storageLocation\n    %% the below\
-    \ property is an array with cardinality [0..*]\n    string previewLocations\n\
-    }\n\nclass Rig { \n}\nclass Connection {\n    string id\n    string label\n  \
-    \  string description\n    string type\n    boolean required\n    boolean allowMultiple\n\
-    }\nclass KeyValue {\n    string key\n    string value\n}\nclass Error {\n    string\
-    \ message\n    integer code\n}\n\nRack \"1\" --> \"0..*\" Component : components\n\
-    Rig \"1\" --> \"0..*\" ComponentDefinition : componentDefinitions\nRig  \"1\"\
-    \ --> \"0..*\" KeyValue : config\nRig  \"1\" --> \"0..*\" KeyValue : secrets\n\
-    Rack \"1\" --> \"0..1\"  Component: rackAsComponent\nRack \"1\" --> \"0..*\" \
-    \ Connection: output\nRig \"1\" --> \"0..*\" Rack : racks\nComponentDefinition\
-    \ \"1\" --> \"1..*\" ComponentTemplate : componentTemplates\nComponentDefinition\
-    \ \"1\" --> \"0..*\" Asset : assets\nComponent \"1\" --> \"0..1\"  ComponentDefinition:\
-    \ componentDefinition\nComponent \"1\" --> \"0..*\"  UiSetting: uiSettings\nComponent\
-    \ \"1\" --> \"0..*\"  Connection: input\nComponent \"1\" --> \"0..*\"  Connection:\
-    \ output\nComponentTemplate \"1\" --> \"0..*\"  UiSetting: uiSettings\nComponentTemplate\
-    \ \"1\" --> \"0..*\"  Connection: input\nComponentTemplate \"1\" --> \"0..*\"\
-    \  Connection: output\n```"
+  description: "## Model Diagram\n```mermaid\nclassDiagram\nclass Device {\n    string\
+    \ id\n    string label\n}\nclass Rack {\n    string id\n    string label\n   \
+    \ string description\n    %% the below property is an array with cardinality [0..*]\n\
+    \    string hiddenComponents\n}\nclass UiSetting {\n    string id\n    string\
+    \ label\n    boolean hidden\n    string dataType\n    string uiType\n    object\
+    \ defaultValue\n    object initialValue\n}\nclass DeviceFactory {\n    string\
+    \ id\n    string label\n    object apiConfiguration\n    string version\n}\n\n\
+    class Asset {\n    string id\n    string type\n    string label\n    string description\n\
+    \    string storageLocation\n    %% the below property is an array with cardinality\
+    \ [0..*]\n    string previewLocations\n}\n\nclass Rig { \n}\nclass Connection\
+    \ {\n    string id\n    string label\n    string description\n    string type\n\
+    \    boolean required\n    boolean allowMultiple\n}\nclass KeyValue {\n    string\
+    \ key\n    string value\n}\nclass Error {\n    string message\n    integer code\n\
+    }\n\nRack \"1\" --> \"0..*\" Device : devices\nRig \"1\" --> \"0..*\" DeviceFactory\
+    \ : factories\nRig  \"1\" --> \"0..*\" KeyValue : config\nRig  \"1\" --> \"0..*\"\
+    \ KeyValue : secrets\nDeviceFactory \"1\" --> \"0..1\"  Rack: rackAsDevice\nRack\
+    \ \"1\" --> \"0..*\"  Connection: output\nRig \"1\" --> \"0..*\" Rack : racks\n\
+    DeviceFactory \"1\" --> \"0..*\" Asset : assets\nDevice \"1\" --> \"1\"  DeviceFactory:\
+    \ definition\nDevice \"1\" --> \"0..*\"  UiSetting: uiSettingOverrides\nDeviceFactory\
+    \ \"1\" --> \"0..*\"  UiSetting: uiSettings\nDeviceFactory \"1\" --> \"0..*\"\
+    \  Connection: input\nDeviceFactory \"1\" --> \"0..*\"  Connection: output\n```"
   title: aifi - OpenAPI 3.0
   version: 1.0.0
 servers:
@@ -44,7 +39,7 @@ paths:
                 type: array
           description: A list of racks
       summary: Retrieve a list of racks
-      x-openapi-router-controller: aifi.server.controller
+      x-openapi-router-controller: aifi.api.controllers.default_controller
     post:
       operationId: create_rack
       requestBody:
@@ -68,7 +63,7 @@ paths:
                 $ref: '#/components/schemas/Error'
           description: Bad request
       summary: Create a new rack
-      x-openapi-router-controller: aifi.server.controller
+      x-openapi-router-controller: aifi.api.controllers.default_controller
   /racks/{rackId}:
     delete:
       operationId: delete_rack_by_id
@@ -91,7 +86,7 @@ paths:
                 $ref: '#/components/schemas/Error'
           description: Rack not found
       summary: Delete a specific rack
-      x-openapi-router-controller: aifi.server.controller
+      x-openapi-router-controller: aifi.api.controllers.default_controller
     get:
       operationId: get_rack_by_id
       parameters:
@@ -117,7 +112,7 @@ paths:
                 $ref: '#/components/schemas/Error'
           description: Rack not found
       summary: Retrieve a specific rack
-      x-openapi-router-controller: aifi.server.controller
+      x-openapi-router-controller: aifi.api.controllers.default_controller
     put:
       operationId: update_rack_by_id
       parameters:
@@ -156,7 +151,7 @@ paths:
                 $ref: '#/components/schemas/Error'
           description: Rack not found
       summary: Update a specific rack
-      x-openapi-router-controller: aifi.server.controller
+      x-openapi-router-controller: aifi.api.controllers.default_controller
   /rig:
     get:
       operationId: get_rig
@@ -168,9 +163,448 @@ paths:
                 $ref: '#/components/schemas/Rig'
           description: The rig object
       summary: Retrieve the rig
-      x-openapi-router-controller: aifi.server.controller
+      x-openapi-router-controller: aifi.api.controllers.default_controller
 components:
   schemas:
+    Device:
+      example:
+        uiSettingOverrides:
+        - hidden: true
+          defaultValue: "{}"
+          dataType: dataType
+          uiType: uiType
+          id: id
+          label: label
+          initialValue: "{}"
+        - hidden: true
+          defaultValue: "{}"
+          dataType: dataType
+          uiType: uiType
+          id: id
+          label: label
+          initialValue: "{}"
+        definition:
+          output:
+          - allowMultiple: true
+            description: description
+            id: id
+            label: label
+            type: type
+            required: true
+          - allowMultiple: true
+            description: description
+            id: id
+            label: label
+            type: type
+            required: true
+          apiConfiguration: "{}"
+          input:
+          - allowMultiple: true
+            description: description
+            id: id
+            label: label
+            type: type
+            required: true
+          - allowMultiple: true
+            description: description
+            id: id
+            label: label
+            type: type
+            required: true
+          assets:
+          - description: description
+            storageLocation: storageLocation
+            id: id
+            label: label
+            previewLocations:
+            - previewLocations
+            - previewLocations
+            type: type
+          - description: description
+            storageLocation: storageLocation
+            id: id
+            label: label
+            previewLocations:
+            - previewLocations
+            - previewLocations
+            type: type
+          uiSettings:
+          - hidden: true
+            defaultValue: "{}"
+            dataType: dataType
+            uiType: uiType
+            id: id
+            label: label
+            initialValue: "{}"
+          - hidden: true
+            defaultValue: "{}"
+            dataType: dataType
+            uiType: uiType
+            id: id
+            label: label
+            initialValue: "{}"
+          id: id
+          label: label
+          version: version
+        id: id
+        label: label
+      properties:
+        id:
+          title: id
+          type: string
+        label:
+          title: label
+          type: string
+        definition:
+          $ref: '#/components/schemas/DeviceFactory'
+        uiSettingOverrides:
+          items:
+            $ref: '#/components/schemas/UiSetting'
+          title: uiSettingOverrides
+          type: array
+      title: Device
+      type: object
+    DeviceFactory:
+      example:
+        output:
+        - allowMultiple: true
+          description: description
+          id: id
+          label: label
+          type: type
+          required: true
+        - allowMultiple: true
+          description: description
+          id: id
+          label: label
+          type: type
+          required: true
+        apiConfiguration: "{}"
+        input:
+        - allowMultiple: true
+          description: description
+          id: id
+          label: label
+          type: type
+          required: true
+        - allowMultiple: true
+          description: description
+          id: id
+          label: label
+          type: type
+          required: true
+        assets:
+        - description: description
+          storageLocation: storageLocation
+          id: id
+          label: label
+          previewLocations:
+          - previewLocations
+          - previewLocations
+          type: type
+        - description: description
+          storageLocation: storageLocation
+          id: id
+          label: label
+          previewLocations:
+          - previewLocations
+          - previewLocations
+          type: type
+        uiSettings:
+        - hidden: true
+          defaultValue: "{}"
+          dataType: dataType
+          uiType: uiType
+          id: id
+          label: label
+          initialValue: "{}"
+        - hidden: true
+          defaultValue: "{}"
+          dataType: dataType
+          uiType: uiType
+          id: id
+          label: label
+          initialValue: "{}"
+        id: id
+        label: label
+        version: version
+      properties:
+        id:
+          title: id
+          type: string
+        label:
+          title: label
+          type: string
+        apiConfiguration:
+          title: apiConfiguration
+          type: object
+        version:
+          title: version
+          type: string
+        assets:
+          items:
+            $ref: '#/components/schemas/Asset'
+          title: assets
+          type: array
+        uiSettings:
+          items:
+            $ref: '#/components/schemas/UiSetting'
+          title: uiSettings
+          type: array
+        input:
+          items:
+            $ref: '#/components/schemas/Connection'
+          title: input
+          type: array
+        output:
+          items:
+            $ref: '#/components/schemas/Connection'
+          title: output
+          type: array
+      title: DeviceFactory
+      type: object
+    Rack:
+      example:
+        output:
+        - allowMultiple: true
+          description: description
+          id: id
+          label: label
+          type: type
+          required: true
+        - allowMultiple: true
+          description: description
+          id: id
+          label: label
+          type: type
+          required: true
+        hiddenComponents:
+        - hiddenComponents
+        - hiddenComponents
+        devices:
+        - uiSettingOverrides:
+          - hidden: true
+            defaultValue: "{}"
+            dataType: dataType
+            uiType: uiType
+            id: id
+            label: label
+            initialValue: "{}"
+          - hidden: true
+            defaultValue: "{}"
+            dataType: dataType
+            uiType: uiType
+            id: id
+            label: label
+            initialValue: "{}"
+          definition:
+            output:
+            - allowMultiple: true
+              description: description
+              id: id
+              label: label
+              type: type
+              required: true
+            - allowMultiple: true
+              description: description
+              id: id
+              label: label
+              type: type
+              required: true
+            apiConfiguration: "{}"
+            input:
+            - allowMultiple: true
+              description: description
+              id: id
+              label: label
+              type: type
+              required: true
+            - allowMultiple: true
+              description: description
+              id: id
+              label: label
+              type: type
+              required: true
+            assets:
+            - description: description
+              storageLocation: storageLocation
+              id: id
+              label: label
+              previewLocations:
+              - previewLocations
+              - previewLocations
+              type: type
+            - description: description
+              storageLocation: storageLocation
+              id: id
+              label: label
+              previewLocations:
+              - previewLocations
+              - previewLocations
+              type: type
+            uiSettings:
+            - hidden: true
+              defaultValue: "{}"
+              dataType: dataType
+              uiType: uiType
+              id: id
+              label: label
+              initialValue: "{}"
+            - hidden: true
+              defaultValue: "{}"
+              dataType: dataType
+              uiType: uiType
+              id: id
+              label: label
+              initialValue: "{}"
+            id: id
+            label: label
+            version: version
+          id: id
+          label: label
+        - uiSettingOverrides:
+          - hidden: true
+            defaultValue: "{}"
+            dataType: dataType
+            uiType: uiType
+            id: id
+            label: label
+            initialValue: "{}"
+          - hidden: true
+            defaultValue: "{}"
+            dataType: dataType
+            uiType: uiType
+            id: id
+            label: label
+            initialValue: "{}"
+          definition:
+            output:
+            - allowMultiple: true
+              description: description
+              id: id
+              label: label
+              type: type
+              required: true
+            - allowMultiple: true
+              description: description
+              id: id
+              label: label
+              type: type
+              required: true
+            apiConfiguration: "{}"
+            input:
+            - allowMultiple: true
+              description: description
+              id: id
+              label: label
+              type: type
+              required: true
+            - allowMultiple: true
+              description: description
+              id: id
+              label: label
+              type: type
+              required: true
+            assets:
+            - description: description
+              storageLocation: storageLocation
+              id: id
+              label: label
+              previewLocations:
+              - previewLocations
+              - previewLocations
+              type: type
+            - description: description
+              storageLocation: storageLocation
+              id: id
+              label: label
+              previewLocations:
+              - previewLocations
+              - previewLocations
+              type: type
+            uiSettings:
+            - hidden: true
+              defaultValue: "{}"
+              dataType: dataType
+              uiType: uiType
+              id: id
+              label: label
+              initialValue: "{}"
+            - hidden: true
+              defaultValue: "{}"
+              dataType: dataType
+              uiType: uiType
+              id: id
+              label: label
+              initialValue: "{}"
+            id: id
+            label: label
+            version: version
+          id: id
+          label: label
+        description: description
+        id: id
+        label: label
+      properties:
+        id:
+          title: id
+          type: string
+        label:
+          title: label
+          type: string
+        description:
+          title: description
+          type: string
+        hiddenComponents:
+          items:
+            type: string
+          title: hiddenComponents
+          type: array
+        devices:
+          items:
+            $ref: '#/components/schemas/Device'
+          title: devices
+          type: array
+        output:
+          items:
+            $ref: '#/components/schemas/Connection'
+          title: output
+          type: array
+      title: Rack
+      type: object
+    UiSetting:
+      example:
+        hidden: true
+        defaultValue: "{}"
+        dataType: dataType
+        uiType: uiType
+        id: id
+        label: label
+        initialValue: "{}"
+      properties:
+        id:
+          title: id
+          type: string
+        label:
+          title: label
+          type: string
+        hidden:
+          title: hidden
+          type: boolean
+        dataType:
+          title: dataType
+          type: string
+        uiType:
+          title: uiType
+          type: string
+        defaultValue:
+          title: defaultValue
+          type: object
+        initialValue:
+          title: initialValue
+          type: object
+      title: UiSetting
+      type: object
     Asset:
       example:
         description: description
@@ -203,394 +637,6 @@ components:
           title: previewLocations
           type: array
       title: Asset
-      type: object
-    Component:
-      example:
-        output:
-        - allowMultiple: true
-          description: description
-          id: id
-          label: label
-          type: type
-          required: true
-        - allowMultiple: true
-          description: description
-          id: id
-          label: label
-          type: type
-          required: true
-        input:
-        - allowMultiple: true
-          description: description
-          id: id
-          label: label
-          type: type
-          required: true
-        - allowMultiple: true
-          description: description
-          id: id
-          label: label
-          type: type
-          required: true
-        uiSettings:
-        - hidden: true
-          defaultValue: "{}"
-          dataType: dataType
-          uiType: uiType
-          id: id
-          label: label
-          initialValue: "{}"
-        - hidden: true
-          defaultValue: "{}"
-          dataType: dataType
-          uiType: uiType
-          id: id
-          label: label
-          initialValue: "{}"
-        id: id
-        componentDefinition:
-          apiConfiguration: "{}"
-          assets:
-          - description: description
-            storageLocation: storageLocation
-            id: id
-            label: label
-            previewLocations:
-            - previewLocations
-            - previewLocations
-            type: type
-          - description: description
-            storageLocation: storageLocation
-            id: id
-            label: label
-            previewLocations:
-            - previewLocations
-            - previewLocations
-            type: type
-          componentTemplates:
-          - output:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            input:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            uiSettings:
-            - hidden: true
-              defaultValue: "{}"
-              dataType: dataType
-              uiType: uiType
-              id: id
-              label: label
-              initialValue: "{}"
-            - hidden: true
-              defaultValue: "{}"
-              dataType: dataType
-              uiType: uiType
-              id: id
-              label: label
-              initialValue: "{}"
-            id: id
-            label: label
-          - output:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            input:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            uiSettings:
-            - hidden: true
-              defaultValue: "{}"
-              dataType: dataType
-              uiType: uiType
-              id: id
-              label: label
-              initialValue: "{}"
-            - hidden: true
-              defaultValue: "{}"
-              dataType: dataType
-              uiType: uiType
-              id: id
-              label: label
-              initialValue: "{}"
-            id: id
-            label: label
-          id: id
-          label: label
-          version: version
-      properties:
-        id:
-          title: id
-          type: string
-        uiSettings:
-          items:
-            $ref: '#/components/schemas/UiSetting'
-          title: uiSettings
-          type: array
-        input:
-          items:
-            $ref: '#/components/schemas/Connection'
-          title: input
-          type: array
-        output:
-          items:
-            $ref: '#/components/schemas/Connection'
-          title: output
-          type: array
-        componentDefinition:
-          $ref: '#/components/schemas/ComponentDefinition'
-      title: Component
-      type: object
-    ComponentDefinition:
-      example:
-        apiConfiguration: "{}"
-        assets:
-        - description: description
-          storageLocation: storageLocation
-          id: id
-          label: label
-          previewLocations:
-          - previewLocations
-          - previewLocations
-          type: type
-        - description: description
-          storageLocation: storageLocation
-          id: id
-          label: label
-          previewLocations:
-          - previewLocations
-          - previewLocations
-          type: type
-        componentTemplates:
-        - output:
-          - allowMultiple: true
-            description: description
-            id: id
-            label: label
-            type: type
-            required: true
-          - allowMultiple: true
-            description: description
-            id: id
-            label: label
-            type: type
-            required: true
-          input:
-          - allowMultiple: true
-            description: description
-            id: id
-            label: label
-            type: type
-            required: true
-          - allowMultiple: true
-            description: description
-            id: id
-            label: label
-            type: type
-            required: true
-          uiSettings:
-          - hidden: true
-            defaultValue: "{}"
-            dataType: dataType
-            uiType: uiType
-            id: id
-            label: label
-            initialValue: "{}"
-          - hidden: true
-            defaultValue: "{}"
-            dataType: dataType
-            uiType: uiType
-            id: id
-            label: label
-            initialValue: "{}"
-          id: id
-          label: label
-        - output:
-          - allowMultiple: true
-            description: description
-            id: id
-            label: label
-            type: type
-            required: true
-          - allowMultiple: true
-            description: description
-            id: id
-            label: label
-            type: type
-            required: true
-          input:
-          - allowMultiple: true
-            description: description
-            id: id
-            label: label
-            type: type
-            required: true
-          - allowMultiple: true
-            description: description
-            id: id
-            label: label
-            type: type
-            required: true
-          uiSettings:
-          - hidden: true
-            defaultValue: "{}"
-            dataType: dataType
-            uiType: uiType
-            id: id
-            label: label
-            initialValue: "{}"
-          - hidden: true
-            defaultValue: "{}"
-            dataType: dataType
-            uiType: uiType
-            id: id
-            label: label
-            initialValue: "{}"
-          id: id
-          label: label
-        id: id
-        label: label
-        version: version
-      properties:
-        id:
-          title: id
-          type: string
-        label:
-          title: label
-          type: string
-        apiConfiguration:
-          title: apiConfiguration
-          type: object
-        version:
-          title: version
-          type: string
-        componentTemplates:
-          items:
-            $ref: '#/components/schemas/ComponentTemplate'
-          title: componentTemplates
-          type: array
-        assets:
-          items:
-            $ref: '#/components/schemas/Asset'
-          title: assets
-          type: array
-      title: ComponentDefinition
-      type: object
-    ComponentTemplate:
-      example:
-        output:
-        - allowMultiple: true
-          description: description
-          id: id
-          label: label
-          type: type
-          required: true
-        - allowMultiple: true
-          description: description
-          id: id
-          label: label
-          type: type
-          required: true
-        input:
-        - allowMultiple: true
-          description: description
-          id: id
-          label: label
-          type: type
-          required: true
-        - allowMultiple: true
-          description: description
-          id: id
-          label: label
-          type: type
-          required: true
-        uiSettings:
-        - hidden: true
-          defaultValue: "{}"
-          dataType: dataType
-          uiType: uiType
-          id: id
-          label: label
-          initialValue: "{}"
-        - hidden: true
-          defaultValue: "{}"
-          dataType: dataType
-          uiType: uiType
-          id: id
-          label: label
-          initialValue: "{}"
-        id: id
-        label: label
-      properties:
-        id:
-          description: The unique identifier for the component template.
-          title: id
-          type: string
-        label:
-          description: The label for the component template.
-          title: label
-          type: string
-        uiSettings:
-          description: The user interface settings for the component.
-          items:
-            $ref: '#/components/schemas/UiSetting'
-          title: uiSettings
-          type: array
-        input:
-          description: The input connections for the component.
-          items:
-            $ref: '#/components/schemas/Connection'
-          title: input
-          type: array
-        output:
-          description: The output connections for the component.
-          items:
-            $ref: '#/components/schemas/Connection'
-          title: output
-          type: array
-      required:
-      - id
-      - label
-      title: ComponentTemplate
       type: object
     Connection:
       example:
@@ -634,510 +680,15 @@ components:
           type: string
       title: KeyValue
       type: object
-    Rack:
-      example:
-        output:
-        - allowMultiple: true
-          description: description
-          id: id
-          label: label
-          type: type
-          required: true
-        - allowMultiple: true
-          description: description
-          id: id
-          label: label
-          type: type
-          required: true
-        components:
-        - output:
-          - allowMultiple: true
-            description: description
-            id: id
-            label: label
-            type: type
-            required: true
-          - allowMultiple: true
-            description: description
-            id: id
-            label: label
-            type: type
-            required: true
-          input:
-          - allowMultiple: true
-            description: description
-            id: id
-            label: label
-            type: type
-            required: true
-          - allowMultiple: true
-            description: description
-            id: id
-            label: label
-            type: type
-            required: true
-          uiSettings:
-          - hidden: true
-            defaultValue: "{}"
-            dataType: dataType
-            uiType: uiType
-            id: id
-            label: label
-            initialValue: "{}"
-          - hidden: true
-            defaultValue: "{}"
-            dataType: dataType
-            uiType: uiType
-            id: id
-            label: label
-            initialValue: "{}"
-          id: id
-          componentDefinition:
-            apiConfiguration: "{}"
-            assets:
-            - description: description
-              storageLocation: storageLocation
-              id: id
-              label: label
-              previewLocations:
-              - previewLocations
-              - previewLocations
-              type: type
-            - description: description
-              storageLocation: storageLocation
-              id: id
-              label: label
-              previewLocations:
-              - previewLocations
-              - previewLocations
-              type: type
-            componentTemplates:
-            - output:
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              input:
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              uiSettings:
-              - hidden: true
-                defaultValue: "{}"
-                dataType: dataType
-                uiType: uiType
-                id: id
-                label: label
-                initialValue: "{}"
-              - hidden: true
-                defaultValue: "{}"
-                dataType: dataType
-                uiType: uiType
-                id: id
-                label: label
-                initialValue: "{}"
-              id: id
-              label: label
-            - output:
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              input:
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              uiSettings:
-              - hidden: true
-                defaultValue: "{}"
-                dataType: dataType
-                uiType: uiType
-                id: id
-                label: label
-                initialValue: "{}"
-              - hidden: true
-                defaultValue: "{}"
-                dataType: dataType
-                uiType: uiType
-                id: id
-                label: label
-                initialValue: "{}"
-              id: id
-              label: label
-            id: id
-            label: label
-            version: version
-        - output:
-          - allowMultiple: true
-            description: description
-            id: id
-            label: label
-            type: type
-            required: true
-          - allowMultiple: true
-            description: description
-            id: id
-            label: label
-            type: type
-            required: true
-          input:
-          - allowMultiple: true
-            description: description
-            id: id
-            label: label
-            type: type
-            required: true
-          - allowMultiple: true
-            description: description
-            id: id
-            label: label
-            type: type
-            required: true
-          uiSettings:
-          - hidden: true
-            defaultValue: "{}"
-            dataType: dataType
-            uiType: uiType
-            id: id
-            label: label
-            initialValue: "{}"
-          - hidden: true
-            defaultValue: "{}"
-            dataType: dataType
-            uiType: uiType
-            id: id
-            label: label
-            initialValue: "{}"
-          id: id
-          componentDefinition:
-            apiConfiguration: "{}"
-            assets:
-            - description: description
-              storageLocation: storageLocation
-              id: id
-              label: label
-              previewLocations:
-              - previewLocations
-              - previewLocations
-              type: type
-            - description: description
-              storageLocation: storageLocation
-              id: id
-              label: label
-              previewLocations:
-              - previewLocations
-              - previewLocations
-              type: type
-            componentTemplates:
-            - output:
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              input:
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              uiSettings:
-              - hidden: true
-                defaultValue: "{}"
-                dataType: dataType
-                uiType: uiType
-                id: id
-                label: label
-                initialValue: "{}"
-              - hidden: true
-                defaultValue: "{}"
-                dataType: dataType
-                uiType: uiType
-                id: id
-                label: label
-                initialValue: "{}"
-              id: id
-              label: label
-            - output:
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              input:
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              uiSettings:
-              - hidden: true
-                defaultValue: "{}"
-                dataType: dataType
-                uiType: uiType
-                id: id
-                label: label
-                initialValue: "{}"
-              - hidden: true
-                defaultValue: "{}"
-                dataType: dataType
-                uiType: uiType
-                id: id
-                label: label
-                initialValue: "{}"
-              id: id
-              label: label
-            id: id
-            label: label
-            version: version
-        hiddenComponents:
-        - hiddenComponents
-        - hiddenComponents
-        description: description
-        id: id
-        label: label
-        rackAsComponent:
-          output:
-          - allowMultiple: true
-            description: description
-            id: id
-            label: label
-            type: type
-            required: true
-          - allowMultiple: true
-            description: description
-            id: id
-            label: label
-            type: type
-            required: true
-          input:
-          - allowMultiple: true
-            description: description
-            id: id
-            label: label
-            type: type
-            required: true
-          - allowMultiple: true
-            description: description
-            id: id
-            label: label
-            type: type
-            required: true
-          uiSettings:
-          - hidden: true
-            defaultValue: "{}"
-            dataType: dataType
-            uiType: uiType
-            id: id
-            label: label
-            initialValue: "{}"
-          - hidden: true
-            defaultValue: "{}"
-            dataType: dataType
-            uiType: uiType
-            id: id
-            label: label
-            initialValue: "{}"
-          id: id
-          componentDefinition:
-            apiConfiguration: "{}"
-            assets:
-            - description: description
-              storageLocation: storageLocation
-              id: id
-              label: label
-              previewLocations:
-              - previewLocations
-              - previewLocations
-              type: type
-            - description: description
-              storageLocation: storageLocation
-              id: id
-              label: label
-              previewLocations:
-              - previewLocations
-              - previewLocations
-              type: type
-            componentTemplates:
-            - output:
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              input:
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              uiSettings:
-              - hidden: true
-                defaultValue: "{}"
-                dataType: dataType
-                uiType: uiType
-                id: id
-                label: label
-                initialValue: "{}"
-              - hidden: true
-                defaultValue: "{}"
-                dataType: dataType
-                uiType: uiType
-                id: id
-                label: label
-                initialValue: "{}"
-              id: id
-              label: label
-            - output:
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              input:
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              - allowMultiple: true
-                description: description
-                id: id
-                label: label
-                type: type
-                required: true
-              uiSettings:
-              - hidden: true
-                defaultValue: "{}"
-                dataType: dataType
-                uiType: uiType
-                id: id
-                label: label
-                initialValue: "{}"
-              - hidden: true
-                defaultValue: "{}"
-                dataType: dataType
-                uiType: uiType
-                id: id
-                label: label
-                initialValue: "{}"
-              id: id
-              label: label
-            id: id
-            label: label
-            version: version
+    Error:
       properties:
-        id:
-          title: id
+        message:
+          title: message
           type: string
-        label:
-          title: label
-          type: string
-        description:
-          title: description
-          type: string
-        components:
-          items:
-            $ref: '#/components/schemas/Component'
-          title: components
-          type: array
-        rackAsComponent:
-          $ref: '#/components/schemas/Component'
-        output:
-          items:
-            $ref: '#/components/schemas/Connection'
-          title: output
-          type: array
-        hiddenComponents:
-          items:
-            type: string
-          title: hiddenComponents
-          type: array
-      title: Rack
+        code:
+          title: code
+          type: integer
+      title: Error
       type: object
     Rig:
       example:
@@ -1155,343 +706,11 @@ components:
             label: label
             type: type
             required: true
-          components:
-          - output:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            input:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            uiSettings:
-            - hidden: true
-              defaultValue: "{}"
-              dataType: dataType
-              uiType: uiType
-              id: id
-              label: label
-              initialValue: "{}"
-            - hidden: true
-              defaultValue: "{}"
-              dataType: dataType
-              uiType: uiType
-              id: id
-              label: label
-              initialValue: "{}"
-            id: id
-            componentDefinition:
-              apiConfiguration: "{}"
-              assets:
-              - description: description
-                storageLocation: storageLocation
-                id: id
-                label: label
-                previewLocations:
-                - previewLocations
-                - previewLocations
-                type: type
-              - description: description
-                storageLocation: storageLocation
-                id: id
-                label: label
-                previewLocations:
-                - previewLocations
-                - previewLocations
-                type: type
-              componentTemplates:
-              - output:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                input:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                uiSettings:
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
-                id: id
-                label: label
-              - output:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                input:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                uiSettings:
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
-                id: id
-                label: label
-              id: id
-              label: label
-              version: version
-          - output:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            input:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            uiSettings:
-            - hidden: true
-              defaultValue: "{}"
-              dataType: dataType
-              uiType: uiType
-              id: id
-              label: label
-              initialValue: "{}"
-            - hidden: true
-              defaultValue: "{}"
-              dataType: dataType
-              uiType: uiType
-              id: id
-              label: label
-              initialValue: "{}"
-            id: id
-            componentDefinition:
-              apiConfiguration: "{}"
-              assets:
-              - description: description
-                storageLocation: storageLocation
-                id: id
-                label: label
-                previewLocations:
-                - previewLocations
-                - previewLocations
-                type: type
-              - description: description
-                storageLocation: storageLocation
-                id: id
-                label: label
-                previewLocations:
-                - previewLocations
-                - previewLocations
-                type: type
-              componentTemplates:
-              - output:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                input:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                uiSettings:
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
-                id: id
-                label: label
-              - output:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                input:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                uiSettings:
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
-                id: id
-                label: label
-              id: id
-              label: label
-              version: version
           hiddenComponents:
           - hiddenComponents
           - hiddenComponents
-          description: description
-          id: id
-          label: label
-          rackAsComponent:
-            output:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            input:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            uiSettings:
+          devices:
+          - uiSettingOverrides:
             - hidden: true
               defaultValue: "{}"
               dataType: dataType
@@ -1506,9 +725,34 @@ components:
               id: id
               label: label
               initialValue: "{}"
-            id: id
-            componentDefinition:
+            definition:
+              output:
+              - allowMultiple: true
+                description: description
+                id: id
+                label: label
+                type: type
+                required: true
+              - allowMultiple: true
+                description: description
+                id: id
+                label: label
+                type: type
+                required: true
               apiConfiguration: "{}"
+              input:
+              - allowMultiple: true
+                description: description
+                id: id
+                label: label
+                type: type
+                required: true
+              - allowMultiple: true
+                description: description
+                id: id
+                label: label
+                type: type
+                required: true
               assets:
               - description: description
                 storageLocation: storageLocation
@@ -1526,96 +770,109 @@ components:
                 - previewLocations
                 - previewLocations
                 type: type
-              componentTemplates:
-              - output:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                input:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                uiSettings:
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
+              uiSettings:
+              - hidden: true
+                defaultValue: "{}"
+                dataType: dataType
+                uiType: uiType
                 id: id
                 label: label
-              - output:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                input:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                uiSettings:
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
+                initialValue: "{}"
+              - hidden: true
+                defaultValue: "{}"
+                dataType: dataType
+                uiType: uiType
                 id: id
                 label: label
+                initialValue: "{}"
               id: id
               label: label
               version: version
+            id: id
+            label: label
+          - uiSettingOverrides:
+            - hidden: true
+              defaultValue: "{}"
+              dataType: dataType
+              uiType: uiType
+              id: id
+              label: label
+              initialValue: "{}"
+            - hidden: true
+              defaultValue: "{}"
+              dataType: dataType
+              uiType: uiType
+              id: id
+              label: label
+              initialValue: "{}"
+            definition:
+              output:
+              - allowMultiple: true
+                description: description
+                id: id
+                label: label
+                type: type
+                required: true
+              - allowMultiple: true
+                description: description
+                id: id
+                label: label
+                type: type
+                required: true
+              apiConfiguration: "{}"
+              input:
+              - allowMultiple: true
+                description: description
+                id: id
+                label: label
+                type: type
+                required: true
+              - allowMultiple: true
+                description: description
+                id: id
+                label: label
+                type: type
+                required: true
+              assets:
+              - description: description
+                storageLocation: storageLocation
+                id: id
+                label: label
+                previewLocations:
+                - previewLocations
+                - previewLocations
+                type: type
+              - description: description
+                storageLocation: storageLocation
+                id: id
+                label: label
+                previewLocations:
+                - previewLocations
+                - previewLocations
+                type: type
+              uiSettings:
+              - hidden: true
+                defaultValue: "{}"
+                dataType: dataType
+                uiType: uiType
+                id: id
+                label: label
+                initialValue: "{}"
+              - hidden: true
+                defaultValue: "{}"
+                dataType: dataType
+                uiType: uiType
+                id: id
+                label: label
+                initialValue: "{}"
+              id: id
+              label: label
+              version: version
+            id: id
+            label: label
+          description: description
+          id: id
+          label: label
         - output:
           - allowMultiple: true
             description: description
@@ -1629,343 +886,11 @@ components:
             label: label
             type: type
             required: true
-          components:
-          - output:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            input:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            uiSettings:
-            - hidden: true
-              defaultValue: "{}"
-              dataType: dataType
-              uiType: uiType
-              id: id
-              label: label
-              initialValue: "{}"
-            - hidden: true
-              defaultValue: "{}"
-              dataType: dataType
-              uiType: uiType
-              id: id
-              label: label
-              initialValue: "{}"
-            id: id
-            componentDefinition:
-              apiConfiguration: "{}"
-              assets:
-              - description: description
-                storageLocation: storageLocation
-                id: id
-                label: label
-                previewLocations:
-                - previewLocations
-                - previewLocations
-                type: type
-              - description: description
-                storageLocation: storageLocation
-                id: id
-                label: label
-                previewLocations:
-                - previewLocations
-                - previewLocations
-                type: type
-              componentTemplates:
-              - output:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                input:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                uiSettings:
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
-                id: id
-                label: label
-              - output:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                input:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                uiSettings:
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
-                id: id
-                label: label
-              id: id
-              label: label
-              version: version
-          - output:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            input:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            uiSettings:
-            - hidden: true
-              defaultValue: "{}"
-              dataType: dataType
-              uiType: uiType
-              id: id
-              label: label
-              initialValue: "{}"
-            - hidden: true
-              defaultValue: "{}"
-              dataType: dataType
-              uiType: uiType
-              id: id
-              label: label
-              initialValue: "{}"
-            id: id
-            componentDefinition:
-              apiConfiguration: "{}"
-              assets:
-              - description: description
-                storageLocation: storageLocation
-                id: id
-                label: label
-                previewLocations:
-                - previewLocations
-                - previewLocations
-                type: type
-              - description: description
-                storageLocation: storageLocation
-                id: id
-                label: label
-                previewLocations:
-                - previewLocations
-                - previewLocations
-                type: type
-              componentTemplates:
-              - output:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                input:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                uiSettings:
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
-                id: id
-                label: label
-              - output:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                input:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                uiSettings:
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
-                id: id
-                label: label
-              id: id
-              label: label
-              version: version
           hiddenComponents:
           - hiddenComponents
           - hiddenComponents
-          description: description
-          id: id
-          label: label
-          rackAsComponent:
-            output:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            input:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            uiSettings:
+          devices:
+          - uiSettingOverrides:
             - hidden: true
               defaultValue: "{}"
               dataType: dataType
@@ -1980,9 +905,34 @@ components:
               id: id
               label: label
               initialValue: "{}"
-            id: id
-            componentDefinition:
+            definition:
+              output:
+              - allowMultiple: true
+                description: description
+                id: id
+                label: label
+                type: type
+                required: true
+              - allowMultiple: true
+                description: description
+                id: id
+                label: label
+                type: type
+                required: true
               apiConfiguration: "{}"
+              input:
+              - allowMultiple: true
+                description: description
+                id: id
+                label: label
+                type: type
+                required: true
+              - allowMultiple: true
+                description: description
+                id: id
+                label: label
+                type: type
+                required: true
               assets:
               - description: description
                 storageLocation: storageLocation
@@ -2000,96 +950,234 @@ components:
                 - previewLocations
                 - previewLocations
                 type: type
-              componentTemplates:
-              - output:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                input:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                uiSettings:
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
+              uiSettings:
+              - hidden: true
+                defaultValue: "{}"
+                dataType: dataType
+                uiType: uiType
                 id: id
                 label: label
-              - output:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                input:
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                - allowMultiple: true
-                  description: description
-                  id: id
-                  label: label
-                  type: type
-                  required: true
-                uiSettings:
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
-                - hidden: true
-                  defaultValue: "{}"
-                  dataType: dataType
-                  uiType: uiType
-                  id: id
-                  label: label
-                  initialValue: "{}"
+                initialValue: "{}"
+              - hidden: true
+                defaultValue: "{}"
+                dataType: dataType
+                uiType: uiType
                 id: id
                 label: label
+                initialValue: "{}"
               id: id
               label: label
               version: version
+            id: id
+            label: label
+          - uiSettingOverrides:
+            - hidden: true
+              defaultValue: "{}"
+              dataType: dataType
+              uiType: uiType
+              id: id
+              label: label
+              initialValue: "{}"
+            - hidden: true
+              defaultValue: "{}"
+              dataType: dataType
+              uiType: uiType
+              id: id
+              label: label
+              initialValue: "{}"
+            definition:
+              output:
+              - allowMultiple: true
+                description: description
+                id: id
+                label: label
+                type: type
+                required: true
+              - allowMultiple: true
+                description: description
+                id: id
+                label: label
+                type: type
+                required: true
+              apiConfiguration: "{}"
+              input:
+              - allowMultiple: true
+                description: description
+                id: id
+                label: label
+                type: type
+                required: true
+              - allowMultiple: true
+                description: description
+                id: id
+                label: label
+                type: type
+                required: true
+              assets:
+              - description: description
+                storageLocation: storageLocation
+                id: id
+                label: label
+                previewLocations:
+                - previewLocations
+                - previewLocations
+                type: type
+              - description: description
+                storageLocation: storageLocation
+                id: id
+                label: label
+                previewLocations:
+                - previewLocations
+                - previewLocations
+                type: type
+              uiSettings:
+              - hidden: true
+                defaultValue: "{}"
+                dataType: dataType
+                uiType: uiType
+                id: id
+                label: label
+                initialValue: "{}"
+              - hidden: true
+                defaultValue: "{}"
+                dataType: dataType
+                uiType: uiType
+                id: id
+                label: label
+                initialValue: "{}"
+              id: id
+              label: label
+              version: version
+            id: id
+            label: label
+          description: description
+          id: id
+          label: label
+        factories:
+        - output:
+          - allowMultiple: true
+            description: description
+            id: id
+            label: label
+            type: type
+            required: true
+          - allowMultiple: true
+            description: description
+            id: id
+            label: label
+            type: type
+            required: true
+          apiConfiguration: "{}"
+          input:
+          - allowMultiple: true
+            description: description
+            id: id
+            label: label
+            type: type
+            required: true
+          - allowMultiple: true
+            description: description
+            id: id
+            label: label
+            type: type
+            required: true
+          assets:
+          - description: description
+            storageLocation: storageLocation
+            id: id
+            label: label
+            previewLocations:
+            - previewLocations
+            - previewLocations
+            type: type
+          - description: description
+            storageLocation: storageLocation
+            id: id
+            label: label
+            previewLocations:
+            - previewLocations
+            - previewLocations
+            type: type
+          uiSettings:
+          - hidden: true
+            defaultValue: "{}"
+            dataType: dataType
+            uiType: uiType
+            id: id
+            label: label
+            initialValue: "{}"
+          - hidden: true
+            defaultValue: "{}"
+            dataType: dataType
+            uiType: uiType
+            id: id
+            label: label
+            initialValue: "{}"
+          id: id
+          label: label
+          version: version
+        - output:
+          - allowMultiple: true
+            description: description
+            id: id
+            label: label
+            type: type
+            required: true
+          - allowMultiple: true
+            description: description
+            id: id
+            label: label
+            type: type
+            required: true
+          apiConfiguration: "{}"
+          input:
+          - allowMultiple: true
+            description: description
+            id: id
+            label: label
+            type: type
+            required: true
+          - allowMultiple: true
+            description: description
+            id: id
+            label: label
+            type: type
+            required: true
+          assets:
+          - description: description
+            storageLocation: storageLocation
+            id: id
+            label: label
+            previewLocations:
+            - previewLocations
+            - previewLocations
+            type: type
+          - description: description
+            storageLocation: storageLocation
+            id: id
+            label: label
+            previewLocations:
+            - previewLocations
+            - previewLocations
+            type: type
+          uiSettings:
+          - hidden: true
+            defaultValue: "{}"
+            dataType: dataType
+            uiType: uiType
+            id: id
+            label: label
+            initialValue: "{}"
+          - hidden: true
+            defaultValue: "{}"
+            dataType: dataType
+            uiType: uiType
+            id: id
+            label: label
+            initialValue: "{}"
+          id: id
+          label: label
+          version: version
         config:
         - value: value
           key: key
@@ -2100,224 +1188,12 @@ components:
           key: key
         - value: value
           key: key
-        componentDefinitions:
-        - apiConfiguration: "{}"
-          assets:
-          - description: description
-            storageLocation: storageLocation
-            id: id
-            label: label
-            previewLocations:
-            - previewLocations
-            - previewLocations
-            type: type
-          - description: description
-            storageLocation: storageLocation
-            id: id
-            label: label
-            previewLocations:
-            - previewLocations
-            - previewLocations
-            type: type
-          componentTemplates:
-          - output:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            input:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            uiSettings:
-            - hidden: true
-              defaultValue: "{}"
-              dataType: dataType
-              uiType: uiType
-              id: id
-              label: label
-              initialValue: "{}"
-            - hidden: true
-              defaultValue: "{}"
-              dataType: dataType
-              uiType: uiType
-              id: id
-              label: label
-              initialValue: "{}"
-            id: id
-            label: label
-          - output:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            input:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            uiSettings:
-            - hidden: true
-              defaultValue: "{}"
-              dataType: dataType
-              uiType: uiType
-              id: id
-              label: label
-              initialValue: "{}"
-            - hidden: true
-              defaultValue: "{}"
-              dataType: dataType
-              uiType: uiType
-              id: id
-              label: label
-              initialValue: "{}"
-            id: id
-            label: label
-          id: id
-          label: label
-          version: version
-        - apiConfiguration: "{}"
-          assets:
-          - description: description
-            storageLocation: storageLocation
-            id: id
-            label: label
-            previewLocations:
-            - previewLocations
-            - previewLocations
-            type: type
-          - description: description
-            storageLocation: storageLocation
-            id: id
-            label: label
-            previewLocations:
-            - previewLocations
-            - previewLocations
-            type: type
-          componentTemplates:
-          - output:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            input:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            uiSettings:
-            - hidden: true
-              defaultValue: "{}"
-              dataType: dataType
-              uiType: uiType
-              id: id
-              label: label
-              initialValue: "{}"
-            - hidden: true
-              defaultValue: "{}"
-              dataType: dataType
-              uiType: uiType
-              id: id
-              label: label
-              initialValue: "{}"
-            id: id
-            label: label
-          - output:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            input:
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            - allowMultiple: true
-              description: description
-              id: id
-              label: label
-              type: type
-              required: true
-            uiSettings:
-            - hidden: true
-              defaultValue: "{}"
-              dataType: dataType
-              uiType: uiType
-              id: id
-              label: label
-              initialValue: "{}"
-            - hidden: true
-              defaultValue: "{}"
-              dataType: dataType
-              uiType: uiType
-              id: id
-              label: label
-              initialValue: "{}"
-            id: id
-            label: label
-          id: id
-          label: label
-          version: version
       properties:
+        factories:
+          items:
+            $ref: '#/components/schemas/DeviceFactory'
+          title: factories
+          type: array
         config:
           items:
             $ref: '#/components/schemas/KeyValue'
@@ -2328,58 +1204,10 @@ components:
             $ref: '#/components/schemas/KeyValue'
           title: secrets
           type: array
-        componentDefinitions:
-          items:
-            $ref: '#/components/schemas/ComponentDefinition'
-          title: componentDefinitions
-          type: array
         racks:
           items:
             $ref: '#/components/schemas/Rack'
           title: racks
           type: array
       title: Rig
-      type: object
-    UiSetting:
-      example:
-        hidden: true
-        defaultValue: "{}"
-        dataType: dataType
-        uiType: uiType
-        id: id
-        label: label
-        initialValue: "{}"
-      properties:
-        id:
-          title: id
-          type: string
-        label:
-          title: label
-          type: string
-        hidden:
-          title: hidden
-          type: boolean
-        dataType:
-          title: dataType
-          type: string
-        uiType:
-          title: uiType
-          type: string
-        defaultValue:
-          title: defaultValue
-          type: object
-        initialValue:
-          title: initialValue
-          type: object
-      title: UiSetting
-      type: object
-    Error:
-      properties:
-        message:
-          title: message
-          type: string
-        code:
-          title: code
-          type: integer
-      title: Error
       type: object

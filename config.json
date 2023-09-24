@@ -1,5 +1,5 @@
 {
     "devices" : [
-       "aifi.sample.greet"
+       "aifi.sample.greet.Greet"
     ]
 }

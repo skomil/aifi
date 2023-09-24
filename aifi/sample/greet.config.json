@@ -1,0 +1,42 @@
+{
+    "templates": [
+        {
+            "id": "default",
+            "label": "Greeting Widget",
+            "appSettings": [
+                {
+                    "uiType": "UI_HIDDEN",
+                    "apiShape": "waitTime",
+                    "defaultValue": 1
+                },
+                {
+                    "uiType": "UI_INPUT",
+                    "apiShape": "performGreeting"
+                },
+                {
+                    "uiType": "UI_TEXTBOX",
+                    "apiShape": "prompt"
+                }
+            ]
+        },
+        {
+            "id": "checkbox",
+            "label": "Greeting Widget with Checkbox",
+            "appSettings": [
+                {
+                    "uiType": "UI_INPUT",
+                    "apiShape": "waitTime"
+                },
+                {
+                    "uiType": "UI_CHECKBOX",
+                    "label": "Show Greeting",
+                    "apiShape": "performGreeting"
+                },
+                {
+                    "uiType": "UI_TEXTBOX",
+                    "apiShape": "prompt"
+                }
+            ]
+        }
+    ]
+}

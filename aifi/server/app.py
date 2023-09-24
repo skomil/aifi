@@ -18,11 +18,13 @@ def intialize(config):
 
 def __link_device(module_path):
     logging.info(f"Loading Device: {module_path}")
-    module_id = module_path.split(".")[-1]
-    module =  importlib.import_module(module_path)
-    module_config = module.initialize()
+    module_arr = module_path.split('.')
+    module_id = module_arr.pop()
+    module_cls = getattr(importlib.import_module('.'.join(module_arr)), module_id)
+    module = module_cls()
+    module_config = module.get_config()
     module_config['id'] = module_id 
-    module_config['url'] = f'/api/device/{module_id}'
+    module_config['url'] = f'/api/device/{module_id.lower()}'
     device_registry.append(module_config)
     app.mount(module_config['url'], module.app)
 

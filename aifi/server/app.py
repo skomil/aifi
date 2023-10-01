@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from fastapi.middleware.cors import CORSMiddleware
 import importlib
 import logging
 
@@ -11,10 +15,21 @@ app = FastAPI(
 
 device_registry = []
 
+racks = []
+
+ui_routes = ["/rig", "/racks"]
+
+templates = Jinja2Templates(directory="templates")
 
 def intialize(config):
     for device in config['devices']:
         __link_device(device)
+    for rack in config['racks']:
+        racks.append(rack)
+        ui_routes.append(f"/rack/{rack['id']}")
+    for route in ui_routes:
+        app.mount(route, StaticFiles(directory="ui_build", html=True), name=route)
+
 
 def __link_device(module_path):
     logging.info(f"Loading Device: {module_path}")
@@ -25,9 +40,22 @@ def __link_device(module_path):
     module_config = module.get_config()
     module_config['id'] = module_id 
     module_config['url'] = f'/api/device/{module_id.lower()}'
+    module_config['module'] = module_arr
     device_registry.append(module_config)
+    app.add_middleware(CORSMiddleware,
+                       allow_origins=['*'],
+                       allow_methods=['*'],
+                       allow_headers=['*'])
     app.mount(module_config['url'], module.app)
 
+@app.get("/")
+async def root(request: Request):
+    if 'info' in request.query_params:
+        return templates.TemplateResponse("index.html", {'request': request, 'devices': device_registry})
+    else:
+        return RedirectResponse(url='/racks')
+    
+
 @app.get("/api/rig")
-async def root():
-   return {"devices": device_registry}
+async def rig():
+   return {"devices": device_registry, "racks": racks}

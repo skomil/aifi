@@ -3,11 +3,18 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import Rig from './pages/Rig';
 import Racks from './pages/Racks';
+import Rack from './pages/Rack';
 import reportWebVitals from './reportWebVitals';
 import {
   createBrowserRouter,
   RouterProvider,
+  useParams
 } from "react-router-dom";
+
+const RackPage = () => {
+  const { rackId } = useParams<{ rackId: string }>();
+  return <Rack identifier={rackId} />;
+};
 
 const router = createBrowserRouter([
   {
@@ -17,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: "/racks",
     element: <Racks />,
+  },
+  {
+    path: "/rack/:rackId",
+    element: <RackPage />,
   },
 ]);
 

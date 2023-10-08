@@ -29,6 +29,7 @@ def intialize(config):
         ui_routes.append(f"/rack/{rack['id']}")
     for route in ui_routes:
         app.mount(route, StaticFiles(directory="ui_build", html=True), name=route)
+        logging.info(f"adding ui route: {route}")
 
 
 def __link_device(module_path):
@@ -38,8 +39,8 @@ def __link_device(module_path):
     module_cls = getattr(importlib.import_module('.'.join(module_arr)), module_id)
     module = module_cls()
     module_config = module.get_config()
-    module_config['id'] = module_id 
-    module_config['url'] = f'/api/device/{module_id.lower()}'
+    module_config['id'] = module_path
+    module_config['url'] = f'/api/device/{"/".join(module_arr)}'
     module_config['module'] = module_arr
     device_registry.append(module_config)
     app.add_middleware(CORSMiddleware,

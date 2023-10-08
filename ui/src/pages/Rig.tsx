@@ -1,7 +1,8 @@
-import  Grid from '@mui/material/Grid';
 import { useEffect, useState } from 'react';
 import '../App.css';
 import axios from 'axios';
+import { Pane } from 'evergreen-ui';
+import Navigation from '../components/Navigation';
 
 
 /**
@@ -22,38 +23,39 @@ function Rig() {
     });
   }, []);
   return (
-    <Grid container spacing={5} padding={2}>
-      <Grid item xs={6}>
-      <h1>Rig</h1>
-      <h2>Devices</h2>
-        {rig !== undefined && rig.devices.map((device) => {
-          return (<div key={device.id}>
-            <h3>Device Specification</h3>
-            <div>ID: {device.id}</div>
-            <div>Label: {device.label}</div>
-            <div>URL: {device.url}</div>
-            <h4>API</h4>
-            {Object.entries(device.api).map(([apikey, apivalue]) => {
-              return (<div key={`api-${apikey}`}>
-                {apikey} : {apivalue['type']}
+    <Pane>
+      <Pane>
+        <Navigation path={["Rig"]} />
+          <h1>Rig</h1>
+          <h2>Devices</h2>
+            {rig !== undefined && rig.devices.map((device) => {
+              return (<div key={device.id}>
+                <h3>Device Specification</h3>
+                <div>ID: {device.id}</div>
+                <div>Label: {device.label}</div>
+                <div>URL: {device.url}</div>
+                <h4>API</h4>
+                {Object.entries(device.api).map(([apikey, apivalue]) => {
+                  return (<div key={`api-${apikey}`}>
+                    {apikey} : {apivalue['type']}
+                  </div>)
+                })}
+                <h4>Output</h4>
+                {device.output.map((output) => {
+                  return (<div key={`output-${output.id}`}>
+                    {output.id}
+                  </div>)
+                })}
+                <h3>{device.id} Components</h3>
+                {device.templates.map((template) => {
+                  return (<div key={`template-${template.id}`}>
+                    {template.id} : {template.label}
+                  </div>)
+                })}
               </div>)
             })}
-            <h4>Output</h4>
-            {device.output.map((output) => {
-              return (<div key={`output-${output.id}`}>
-                {output.id}
-              </div>)
-            })}
-            <h3>{device.id} Components</h3>
-            {device.templates.map((template) => {
-              return (<div key={`template-${template.id}`}>
-                {template.id} : {template.label}
-              </div>)
-            })}
-          </div>)
-        })}
-      </Grid> 
-    </Grid>
+      </Pane> 
+    </Pane>
   );
 }
 

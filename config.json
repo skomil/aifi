@@ -5,7 +5,7 @@
     "racks": [
         {"id": "rack1", 
          "components": [
-                {"device": "Greet", "configuration": {"ref": "default"}}
+                {"device": "aifi.sample.greet.Greet", "configuration": {"ref": "default"}}
             ]
         }]
 }

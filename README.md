@@ -51,8 +51,7 @@ npm install
 1. Start the backend server:
 
 ```bash
-cd backend
-python -m aifi.server
+python main.py
 ```
 
 2. Start the UI development server:
@@ -62,7 +61,12 @@ cd ui
 npm start
 ```
 
-The UI should now be running at http://localhost:3000, and the backend should be listening on http://localhost:5000.
+The UI should now be running at http://localhost:3000, and the backend should be listening on http://localhost:8000.
+
+### Apply Frontend code
+
+The `ui_build` folder contains the production transpiled javascript code
+that is included as static assets in the backend application. When frontend code is changed, run `npm run build` in the ui folder to include the code.
 
 ### Updating the API Schema
 

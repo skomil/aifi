@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>AIFI</title>
+        <redirect url="/ui/index.html" />
+    </head>
+    <body>
+        <h2>AiFi Server</h2>
+        <h2><a href="/ui/index.html">UI</a></h2>
+        <div>Server Information API: <a href="/docs">Docs</a></div>
+        
+        <h3>Devices</h3>
+        {% for device in devices %}
+        <h4>{{'.'.join(device.module)}}.{{device.identifier}}</h4>
+        <div>url: {{device.url}}</div>
+        <div>API: <a href="{{device.url}}/docs">Docs</a></div>
+        {% endfor %}
+    </body>
+</html>

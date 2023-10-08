@@ -1,0 +1,11 @@
+{
+    "devices" : [
+       "aifi.sample.greet.Greet"
+    ],
+    "racks": [
+        {"id": "rack1", 
+         "components": [
+                {"device": "aifi.sample.greet.Greet", "configuration": {"ref": "default"}}
+            ]
+        }]
+}
